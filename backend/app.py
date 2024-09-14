@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for, session
 from flask_cors import CORS
 import numpy as np
 import tensorflow as tf
@@ -9,20 +9,79 @@ import pickle
 import openai
 from openai import OpenAI
 import os
+from authlib.integrations.flask_client import OAuth
 import db
 
 ######## CREATE APP + DATABASE ########
 app = Flask(__name__)
 CORS(app)
+oauth = OAuth(app)
 
 ####### TEST ######
 # #test to insert data to the data base
 # db.db.user_collection.insert_one({"name": "John"})
 
+####### USER LOGIN ########
 ######## MODEL STUFF ########
 # initialize gpt chat instance
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# secret key for session management
+app.secret_key = 'secret_key'
+
+# setup oauth
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+    access_token_url='https://oauth2.googleapis.com/token',
+    authorize_url='https://accounts.google.com/o/oauth2/v2/auth',
+    client_kwargs={
+        'scope': 'openid email profile',
+        'token_endpoint_auth_method': 'client_secret_post',
+    },
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+)
+
+# login route
+@app.route("/login")
+def login():
+    redirect_uri = url_for("auth_callback", _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route("/auth/callback")
+def auth_callback():
+    token = google.authorize_access_token()
+    user_info = google.get("https://www.googleapis.com/oauth2/v3/userinfo").json()
+
+    # store or update user info in MongoDB
+    user_data = {
+        "email": user_info["email"],
+        "name": user_info["name"],
+        "profile_pic": user_info.get("picture", ""),
+    }
+    db.user_collection.update_one(
+        {"email": user_info["email"]}, {"$set": user_data}, upsert=True
+    )
+
+    # store the user in session
+    session["user"] = user_info
+    return redirect("http://localhost:3000/quiz")
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect("/")
+
+@app.route("/profile")
+def profile():
+    user = session.get("user")
+    if user:
+        return jsonify(user)
+    else:
+        return jsonify({"error": "User not logged in"}), 401
 
 # load model and encoder
 model = load_model("skin_classifier.h5")
@@ -108,4 +167,4 @@ def predict():
 
 # start app
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5001)

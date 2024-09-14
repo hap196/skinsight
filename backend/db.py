@@ -9,7 +9,6 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 
 db = client.get_database('skinsight')
 user_collection = pymongo.collection.Collection(db, 'users')
-user_collection.insert_one({"name": "John"})
 
 # send a ping to confirm a successful connection
 try:
