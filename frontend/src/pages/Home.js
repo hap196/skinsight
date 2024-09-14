@@ -8,10 +8,6 @@ const Home = () => {
   const handleGetStarted = () => {
     navigate('/quiz');
   };
-  
-  const handleLogin = () => {
-    window.location.href = "http://localhost:5001/login";
-  };
 
   return (
     <div className="home">
@@ -29,7 +25,6 @@ const Home = () => {
       <section className="section3">
         <h2>Section 3 Header</h2>
         <img src="/assets/image.jpg" alt="Image Description" />
-        <button onClick={handleLogin}>Login with Google</button>
         <button onClick={handleGetStarted}>Get started</button>
       </section>
     </div>

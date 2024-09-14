@@ -11,13 +11,17 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./Quiz.css";
-import Predict from '../pages/Predict';
+import Predict from "../pages/Predict";
 
 const stepsData = [
   { title: "Login" },
   { title: "Questions" },
   { title: "Upload Image" },
 ];
+
+const handleLogin = () => {
+  window.location.href = "http://localhost:5001/login";
+};
 
 const SkinAIForm = () => {
   const [currentStep, setCurrentStep] = useState(0); // Step tracker
@@ -120,7 +124,7 @@ const SkinAIForm = () => {
       </Steps>
       {currentStep === 0 && (
         <div>
-          {/* Add any future Login content here */}
+          <button onClick={handleLogin}>Login with Google</button>
           <Button type="link" onClick={handleSkip}>
             Skip
           </Button>
