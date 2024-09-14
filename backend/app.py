@@ -9,10 +9,17 @@ import pickle
 import openai
 from openai import OpenAI
 import os
+import db
 
+######## CREATE APP + DATABASE ########
 app = Flask(__name__)
 CORS(app)
 
+####### TEST ######
+# #test to insert data to the data base
+# db.db.user_collection.insert_one({"name": "John"})
+
+######## MODEL STUFF ########
 # initialize gpt chat instance
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 openai.api_key = os.getenv("OPENAI_API_KEY")
