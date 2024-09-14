@@ -53,10 +53,9 @@ body, html {
     font-size: 2.5rem;
     font-weight: 300;
     letter-spacing: 8px;
-    top: 30%;
+    top: 27%;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
     position: relative;
-    margin-top: 0;
     z-index: 0;
 }
 
@@ -68,13 +67,41 @@ body, html {
     background-color: #f0f0f0;
 }
 
+.section2 h2 {
+    font-family: 'CustomFont', sans-serif;
+    font-size: 2.2rem;
+    font-weight: lighter;
+    letter-spacing: 4px;
+}
+
+.section2 h4 {
+    font-family: 'OtherFont', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+    margin-top: -20px;
+}
+
 .section2 p {
     font-family: 'OtherFont', sans-serif;
+    margin-left: 200px;
+    margin-right: 200px;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+    line-height: 2;
 }
 
 .section3 {
-    background-color: #e0e0e0;
+    background-color: #f0f0f0;
     text-align: center;
+}
+
+.section3 h2 {
+    font-family: 'CustomFont', sans-serif;
+    font-size: 2rem;
+    font-weight: lighter;
+    letter-spacing: 4px;
 }
 
 .section3 img {
