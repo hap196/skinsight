@@ -107,8 +107,8 @@ def preprocess_image(img, target_size):
     return img
 
 # function to prompt and get a response from gpt (later to be replaced with a live chatbot)
-def get_skincare_recs(predicted_disease):
-    prompt = f"I have been diagnosed with {predicted_disease}. You provide ingredient recommendations for skincare. You are given information about a person's skin conditions (e.g. acne, eczema, psoriasis, rosacea), skin type (dry, combination, or oily), skin concerns the person wants to address (large pores, wrinkles, sun spots, bumpy skin, sebaceous filaments, hyperpigmentation, blackheads, acne scars, flaky skin), and if the person has sensitive skin. Based on this information, only return the information in the JSON format seen at the end. Provide a bulleted list of skincare ingredients that would help the person address their needs; add it to the \"ingredients\" key. Keep the list under 8 ingredients. Make sure all the ingredients can be used together (they do not react with each other or they are not too strong together). Do not recommend brands. Next, provide a 2-3 sentence description about each ingredient; add it to the \"ingredient_descriptions\" key. Keep the terminology simple enough for a middle schooler to understand. Next, suggest a short skincare routine (morning and night) using the ingredients you recommended. Add the morning routine to the \"morning\" key and the night routine to the \"night\" key. JSON format: {{\"ingredients\": [], \"ingredient_descriptions\": [], \"morning\": \"\", \"night\": \"\", }}"
+def get_skincare_recs(predicted_disease, conditions_dict):
+    prompt = f"I have been diagnosed with {predicted_disease}. You provide ingredient recommendations for skincare. You are given information about a person's skin conditions (e.g. acne, eczema, psoriasis, rosacea), skin type (dry, combination, or oily), skin concerns the person wants to address (large pores, wrinkles, sun spots, bumpy skin, sebaceous filaments, hyperpigmentation, blackheads, acne scars, flaky skin), and if the person has sensitive skin. Here is that data: {conditions_dict}. Based on this information, only return the information in the JSON format seen at the end. Provide a bulleted list of skincare ingredients that would help the person address their needs; add it to the \"ingredients\" key. Keep the list under 8 ingredients. Make sure all the ingredients can be used together (they do not react with each other or they are not too strong together). Do not recommend brands. Next, provide a 2-3 sentence description about each ingredient; add it to the \"ingredient_descriptions\" key. Keep the terminology simple enough for a middle schooler to understand. Next, suggest a short skincare routine (morning and night) using the ingredients you recommended. Add the morning routine to the \"morning\" key and the night routine to the \"night\" key. JSON format: {{\"ingredients\": [], \"ingredient_descriptions\": [], \"morning\": \"\", \"night\": \"\", }}"
 
     try:
         # call gpt
@@ -159,7 +159,8 @@ def predict():
         predictions = model.predict(processed_img)
         predicted_disease = label_encoder.inverse_transform([np.argmax(predictions)])
 
-        skincare_recs = get_skincare_recs(predicted_disease[0])
+        quiz_data = {key: request.form.get(key) for key in request.form if key != 'file'}
+        skincare_recs = get_skincare_recs(predicted_disease[0], quiz_data)
 
         # send the json package to frontend
         return jsonify(
@@ -173,4 +174,4 @@ def predict():
 
 # start app
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5001)
+    app.run(debug=True, host="127.0.0.1", port=5000)
