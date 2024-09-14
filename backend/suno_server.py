@@ -9,88 +9,25 @@ import logging
 from dotenv import load_dotenv
 load_dotenv()
 
+# https://suno-ai.notion.site/External-Suno-HackMIT-API-Docs-a47928f8b7ca4b7ab8e0af8a1323ebf1
+# https://vercel.com/josiexws-projects/suno-api-slft
+# https://github.com/gcui-art/suno-api
+
 app = Flask(__name__)
 CORS(app)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-base_url = ''
+base_url = 'https://suno-api-slft-f131g9sej-josiexws-projects.vercel.app'
 
-def remove_source(text):
-    text = str(text)
-    text = re.sub(r'\【.*?\】', '', text)
-    text = re.sub(r'\*+', '', text)
-    return text.strip()
-
-@app.route('/get_assistant', methods=['POST'])
-def get_assistant():
-    global assistant_id
-    data = json.loads(request.data)
-    context = data.get('context')
-    thread_id = data.get('threadId')
+@app.route('/generate', methods=['POST'])
+def generate():
     try:
-        assistant_id = 'asst_A3YGhsDgqZdYk85UyXsRiX6s'
-        if not thread_id:
-            thread = client.beta.threads.create()
-            thread_id = thread.id
-
-        client.beta.threads.messages.create(
-            thread_id=thread_id,
-            role="user",
-            content=context,
-        )
-
-        run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id=assistant_id)
-
-        while True:
-            response = client.beta.threads.runs.retrieve(run_id=run.id, thread_id=thread_id)
-            if response.status not in ["in_progress", "queued"]:
-                break
-            time.sleep(2)
-
-        return jsonify({'assistant_id': assistant_id, 'threadId': thread_id})
+        pass
     except Exception as e:
-        logger.error('Error fetching assistant: %s', str(e))
+        logger.error('Error generating music: %s', str(e))
         return make_response(f"An error occurred while fetching assistant: {str(e)}", 500)
-
-@app.route('/send_message', methods=['POST'])
-def send_message():
-    global assistant_id, thread_id
-    data = json.loads(request.data)
-    user_input = data.get('input')
-    thread_id = data.get('threadId')
-    try:
-        if not thread_id:
-            thread = client.beta.threads.create()
-            thread_id = thread.id
-
-        client.beta.threads.messages.create(
-            thread_id=thread_id,
-            role="user",
-            content=user_input,
-        )
-
-        run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id=assistant_id)
-
-        while True:
-            response = client.beta.threads.runs.retrieve(run_id=run.id, thread_id=thread_id)
-            if response.status not in ["in_progress", "queued"]:
-                break
-            time.sleep(2)
-
-        message_list = client.beta.threads.messages.list(thread_id)
-        last_message = next((msg for msg in message_list.data if msg.run_id == run.id and msg.role == 'assistant'), None)
-        answer = remove_source(last_message.content[0].text.value)
-
-        if answer:
-            return jsonify({'response': answer, 'threadId': thread_id})
-        else:
-            return make_response('No response from the assistant.', 500)
-
-    except Exception as e:
-        logger.error('Error retrieving response: %s', str(e))
-        return make_response(f"An error occurred while retrieving response: {str(e)}", 500)
 
 if __name__ == '__main__':
     app.run(debug=True)
