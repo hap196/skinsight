@@ -13,10 +13,11 @@ code {
 }
 
 :root {
-  --very-light: #fff9f5;
-  --background: #e6d4c3;
+  --very-light: #f0f0f0;
+  --background: #e6dcc7;
   --light-brown: #f6eee3;
   --hover-brown: #f0ddc4af;
+  --norm-brown: #9c7a50;
   --dark-brown: #6b4b3f;
   --accent: #3dbdb0;
   --accent-hover: #8dc6c5;
