@@ -3,7 +3,7 @@ import Chat from './components/Chat';
 import './App.css';
 import axios from 'axios';
 
-const App = () => {
+const Profile = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [assistantId, setAssistantId] = useState(null);
   const [messages, setMessages] = useState(() => {
@@ -82,4 +82,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Profile;
