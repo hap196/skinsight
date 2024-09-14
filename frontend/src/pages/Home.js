@@ -6,7 +6,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate('/predict');
+    navigate('/quiz');
   };
   
   const handleLogin = () => {
