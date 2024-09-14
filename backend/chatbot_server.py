@@ -29,9 +29,6 @@ def remove_source(text):
 @app.route('/get_assistant', methods=['GET'])
 def get_assistant():
     global assistant_id
-
-    data = json.loads(request.data)
-
     try:
         assistant_id = 'asst_A3YGhsDgqZdYk85UyXsRiX6s'
         return jsonify({'assistant_id': assistant_id})
@@ -42,11 +39,9 @@ def get_assistant():
 @app.route('/send_message', methods=['POST'])
 def send_message():
     global assistant_id, thread_id
-
     data = json.loads(request.data)
     user_input = data.get('input')
     thread_id = data.get('threadId')
-
     try:
         if not thread_id:
             thread = client.beta.threads.create()
