@@ -26,12 +26,11 @@ def remove_source(text):
     text = re.sub(r'\*+', '', text)
     return text.strip()
 
-@app.route('/get_assistant', methods=['POST'])
+@app.route('/get_assistant', methods=['GET'])
 def get_assistant():
     global assistant_id
 
     data = json.loads(request.data)
-    user_input = data.get('input')
 
     try:
         assistant_id = 'asst_A3YGhsDgqZdYk85UyXsRiX6s'
