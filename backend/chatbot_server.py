@@ -6,6 +6,8 @@ from flask_cors import CORS
 from openai import OpenAI
 import json
 import logging
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
