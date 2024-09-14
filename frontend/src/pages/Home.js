@@ -25,8 +25,7 @@ const Home = () => {
       </section>
       <section className="section3">
         <h2>no brands, just ingredients</h2>
-        <img src="../assets/skincare.jpg" alt="skincare" />
-        <button onClick={handleLogin}>Take quiz</button>
+        <button onClick={handleLogin}>TAKE QUIZ</button>
       </section>
     </div>
   );
