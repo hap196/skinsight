@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chat from "./components/Chat";
 import axios from "axios";
+import './Profile.css';
 import { Button, Typography, Layout, Space } from "antd";
+import { UpOutlined, LeftOutlined, EditOutlined } from '@ant-design/icons'; // Import Edit icon
 
 const { Title, Text } = Typography;
 const { Sider, Content } = Layout;
 
 const Profile = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false); // State to control sidebar collapse
   const [assistantId, setAssistantId] = useState(null);
   const [messages, setMessages] = useState(() => {
     const savedMessages = sessionStorage.getItem("messages");
@@ -32,7 +35,7 @@ const Profile = () => {
           isUser: false,
         },
         {
-          content: "suggested question",
+          content: "Tell me more about my skincare recommendations",
           isUser: false,
           isSuggested: true,
         },
@@ -59,6 +62,10 @@ const Profile = () => {
     setIsChatOpen(!isChatOpen);
   };
 
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   useEffect(() => {
     sessionStorage.setItem("messages", JSON.stringify(messages));
   }, [messages]);
@@ -68,31 +75,117 @@ const Profile = () => {
   }, [threadId]);
 
   return (
-    <Layout className="app-container">
-      <Sider width={300} className="profile-sidebar">
-        <Title level={2}>Profile</Title>
+    <Layout className="app-container" style={{ height: '100vh', backgroundColor: '#F3E4C7' }}>
+      {/* Collapsed arrow */}
+      {isCollapsed && (
+        <Button
+          type="text"
+          onClick={toggleCollapse}
+          style={{
+            position: 'absolute',
+            top: '50px',
+            left: '0px',
+            border: 'none',
+            backgroundColor: 'transparent',
+            color: 'black',
+            display: 'flex',
+            alignItems: 'center',
+            transform: 'rotate(90deg)',
+            zIndex: 1000,
+          }}
+        >
+          <UpOutlined style={{ marginRight: '5px' }} />
+          View Profile
+        </Button>
+      )}
+
+      <Sider
+        width={300}
+        className="profile-sidebar"
+        collapsible
+        collapsed={isCollapsed}
+        collapsedWidth={0}
+        trigger={null}
+        style={{
+          backgroundColor: '#F3E4C7',
+          color: 'black',
+          height: '100vh',
+          padding: '20px',
+          overflow: 'hidden',
+          transition: 'transform 0.3s ease',
+          transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Title level={3} style={{ color: 'black' }}>Name's Profile</Title>
+          <Button
+            type="text"
+            icon={isCollapsed ? <UpOutlined /> : <LeftOutlined />}
+            shape="circle"
+            onClick={toggleCollapse}
+            style={{
+              color: 'black',
+              fontSize: '16px',
+              borderRadius: '50%',
+              border: 'none',
+              color: 'black'
+            }}
+          />
+        </div>
         <Space direction="vertical">
-          <Text>
-            <strong>Name:</strong> User's Name
-          </Text>
-          <Text>
-            <strong>Skin Type:</strong> User's Skin Type
-          </Text>
-          <Text>
-            <strong>Skin Conditions:</strong> User's Conditions
-          </Text>
-          <Text>
-            <strong>Skin Concerns:</strong> User's Concerns
-          </Text>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Text style={{ color: 'black', marginRight: '10px' }}>
+              <strong>Skin Conditions:</strong>
+            </Text>
+            <Button
+              type="text"
+              style={{ color: 'black' }}
+            />
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <Text style={{ color: 'black', marginRight: '10px' }}>
+              TODO: populate skin conditions
+            </Text>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Text style={{ color: 'black', marginRight: '10px' }}>
+              <strong>Skin Type:</strong>
+            </Text>
+            <Button
+              type="text"
+              icon={<EditOutlined />}
+              style={{ color: 'black' }}
+            />
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <Text style={{ color: 'black', marginRight: '10px' }}>
+              TODO: populate skin type
+            </Text>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Text style={{ color: 'black', marginRight: '10px' }}>
+              <strong>Skin Concerns:</strong>
+            </Text>
+            <Button
+              type="text"
+              icon={<EditOutlined />}
+              style={{ color: 'black' }}
+            />
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <Text style={{ color: 'black', marginRight: '10px' }}>
+              TODO: populate skin concerns
+            </Text>
+          </div>
         </Space>
-        <div className="chat-launcher" style={{ marginTop: "20px" }}>
-          <Button type="primary" onClick={handleChatToggle}>
+        <div className="chat-launcher" style={{ marginTop: "20px", textAlign: 'center' }}>
+        <Button className="brown-button" onClick={handleChatToggle}>
             Talk to our dermatology assistant
-          </Button>
+        </Button>
         </div>
       </Sider>
       <Layout>
-        <Content>
+        <Content style={{ padding: '20px' }}>
           {isChatOpen && (
             <Chat
               handleClose={handleChatToggle}

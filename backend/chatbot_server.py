@@ -15,7 +15,7 @@ CORS(app)
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-api_key = os.getenv('OPENAI_API_KEY')
+api_key = os.getenv('JOSIE_OPENAI_API_KEY')
 client = OpenAI(api_key=api_key)
 assistant_id = None
 thread_id = None

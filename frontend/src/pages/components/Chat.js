@@ -85,7 +85,7 @@ const Chat = ({
     <Layout
       style={{
         position: "fixed",
-        bottom: "150px",
+        bottom: "50px",
         right: "50px",
         width: "350px",
         height: "500px",
@@ -99,6 +99,7 @@ const Chat = ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          padding: "0 16px", // Adjust side padding here
         }}
       >
         <Title level={4} style={{ color: "white", margin: 0 }}>
@@ -128,7 +129,7 @@ const Chat = ({
       <Footer style={{ padding: "16px", position: "relative" }}>
         {isWaiting && (
           <Spin
-            style={{ position: "absolute", bottom: "50px", left: "10px" }}
+            style={{ position: "absolute", bottom: "100px", left: "10px" }}
             size="small"
           />
         )}
@@ -140,6 +141,7 @@ const Chat = ({
             onPressEnter={handleKeyPress}
             placeholder="Type your message..."
             autoSize={{ minRows: 1, maxRows: 4 }}
+            style={{ width: "100%" }} // Make textarea span the full width
           />
           <Button
             type="primary"

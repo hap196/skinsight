@@ -15,10 +15,11 @@
     border: 2px solid #5C4E42;
     cursor: pointer;
     z-index: 9999;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   .suggested-message:hover {
-    background-color: #cecece;
+    background-color: #5c4e4246;
   }
   
   .user-message {
