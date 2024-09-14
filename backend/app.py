@@ -43,7 +43,7 @@ def preprocess_image(img, target_size):
 
 # function to prompt and get a response from gpt (later to be replaced with a live chatbot)
 def get_skincare_recs(predicted_disease):
-    prompt = f"I have been diagnosed with {predicted_disease}. You provide ingredient recommendations for skincare. Given information about a person's skin conditions (e.g. acne, eczema, psoriasis, rosacea), skin type (dry, combination, or oily), skin concerns the person wants to address (large pores, wrinkles, sun spots, bumpy skin, sebaceous filaments, hyperpigmentation, blackheads, acne scars, flaky skin), and if the person has sensitive skin, provide a bulleted list of skincare ingredients that would help the person address their needs. Keep the list under 8 ingredients. Make sure all the ingredients can be used together (they do not react with each other or they are not too strong together). Do not recommend brands. Underneath the bulleted list, provide a 2-3 sentence description about each ingredient. Keep the terminology simple enough for a middle schooler to understand. Below the ingredient descriptions, suggest a short skincare routine (morning and night) using the ingredients you recommended. Separate the bulleted list of ingredients, the descriptions, and the skincare routine with '====='."
+    prompt = f"I have been diagnosed with {predicted_disease}. You provide ingredient recommendations for skincare. You are given information about a person's skin conditions (e.g. acne, eczema, psoriasis, rosacea), skin type (dry, combination, or oily), skin concerns the person wants to address (large pores, wrinkles, sun spots, bumpy skin, sebaceous filaments, hyperpigmentation, blackheads, acne scars, flaky skin), and if the person has sensitive skin. Based on this information, only return the information in the JSON format seen at the end. Provide a bulleted list of skincare ingredients that would help the person address their needs; add it to the \"ingredients\" key. Keep the list under 8 ingredients. Make sure all the ingredients can be used together (they do not react with each other or they are not too strong together). Do not recommend brands. Next, provide a 2-3 sentence description about each ingredient; add it to the \"ingredient_descriptions\" key. Keep the terminology simple enough for a middle schooler to understand. Next, suggest a short skincare routine (morning and night) using the ingredients you recommended. Add the morning routine to the \"morning\" key and the night routine to the \"night\" key. JSON format: {{\"ingredients\": [], \"ingredient_descriptions\": [], \"morning\": \"\", \"night\": \"\", }}"
 
     try:
         # call gpt
@@ -58,7 +58,7 @@ def get_skincare_recs(predicted_disease):
         )
 
         recommendations = response.choices[0].message.content.strip()
-        return recommendations
+        return jsonify(recommendations)
 
     except Exception as e:
         print(f"Error in get_skincare_recs: {str(e)}")
