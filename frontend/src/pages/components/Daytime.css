@@ -1,0 +1,16 @@
+.routine-container.daytime {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.routine-text-daytime {
+  flex: 1;
+  text-align: left;
+}
+
+.routine-image-daytime img {
+  max-width: 50%;
+  height: auto;
+}

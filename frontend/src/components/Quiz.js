@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./Quiz.css";
+import Predict from '../pages/Predict';
 
 const stepsData = [
   { title: "Login" },
@@ -133,7 +134,7 @@ const SkinAIForm = () => {
               <Col span={8} key={option}>
                 <div
                   className="option-box"
-                  onClick={() => handleSelect(option)}
+                  onClick={() => handleSelect(currentQuestion, option)}
                 >
                   {questions[currentQuestion].icons &&
                     questions[currentQuestion].icons[index]}
@@ -162,10 +163,14 @@ const SkinAIForm = () => {
         <div>
           <h3>Upload a clear image of your skin</h3>
           <p>Ensure the image is clear for better analysis.</p>
-          {/* Image Upload functionality */}
-          <Button type="primary" onClick={handleImageUpload}>
+          {/* Add Upload component */}
+          <Button
+            type="primary"
+            onClick={() => message.success("File uploaded successfully")}
+          >
             Upload Image
           </Button>
+          <Predict quizData={formData} />
         </div>
       )}
     </div>
