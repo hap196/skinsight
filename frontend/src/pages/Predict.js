@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Predict = () => {
+const Predict = ({quizData}) => {
   // states
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState(null);
@@ -24,13 +24,15 @@ const Predict = () => {
     // set as form data because we want to include image + multiselect
     const formData = new FormData();
     formData.append("file", file);
-    // later here append the other multiselect
+    for (const key in quizData) {
+      formData.append(key, quizData[key]);
+    }
 
     // post to the flask app
     try {
       // axios.post returns the json prediction response from backend
       const response = await axios.post(
-        "http://127.0.0.1:5001/predict",
+        "http://127.0.0.1:5000/predict",
         formData
       );
       // update states based on prediction from backend
