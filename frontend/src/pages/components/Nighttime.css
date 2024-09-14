@@ -1,0 +1,20 @@
+.routine-container.nighttime {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse; /* Reverses the layout */
+}
+
+.routine-text-nighttime {
+  flex: 1;
+  text-align: left;
+}
+
+.routine-image-nighttime {
+  flex: 1;
+}
+
+.routine-image-nighttime img {
+  max-width: 80%;
+  height: auto;
+}
