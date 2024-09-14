@@ -1,12 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { TextField, Container, Grid, AppBar, Toolbar, IconButton, CircularProgress } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import CloseIcon from '@mui/icons-material/Close';
-import Message from './Message';
+import React, { useState, useEffect, useRef } from "react";
+import { Input, Layout, Button, Typography, Space, Spin } from "antd";
+import { SendOutlined, CloseOutlined } from "@ant-design/icons";
+import Message from "./Message";
 import { MessageDto } from "./MessageDto";
-import axios from 'axios';
+import axios from "axios";
 
-const Chat = ({ handleClose, assistantId, messages, setMessages, threadId, setThreadId }) => {
+const { Header, Content, Footer } = Layout;
+const { TextArea } = Input;
+const { Title } = Typography;
+
+const Chat = ({
+  handleClose,
+  assistantId,
+  messages,
+  setMessages,
+  threadId,
+  setThreadId,
+}) => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [input, setInput] = useState("");
   const [shouldSendMessage, setShouldSendMessage] = useState(false);
@@ -19,17 +29,17 @@ const Chat = ({ handleClose, assistantId, messages, setMessages, threadId, setTh
       setThreadId(response.data.threadId);
       return response.data;
     } catch (error) {
-      console.error('Error fetching message response:', error);
+      console.error("Error fetching message response:", error);
     }
   };
 
-  const createNewMessage = (content, isUser, isSuggested=false) => {
+  const createNewMessage = (content, isUser, isSuggested = false) => {
     return new MessageDto(isUser, isSuggested, content);
   };
 
   const handleSendMessage = async () => {
     if (!assistantId) {
-      console.warn('Assistant is not initialized yet.');
+      console.warn("Assistant is not initialized yet.");
       return;
     }
     const newMessages = [...messages, createNewMessage(input, true)];
@@ -44,12 +54,12 @@ const Chat = ({ handleClose, assistantId, messages, setMessages, threadId, setTh
     if (data.response) {
       setMessages([...newMessages, createNewMessage(data.response, false)]);
     } else {
-      console.error('No response from the assistant.');
+      console.error("No response from the assistant.");
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -68,63 +78,78 @@ const Chat = ({ handleClose, assistantId, messages, setMessages, threadId, setTh
   };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <Container style={{ 
-      position: 'fixed', 
-      bottom: '150px',
-      right: '50px', 
-      width: '350px',
-      height: '500px',
-      display: 'flex',
-      flexDirection: 'column', 
-      border: 'none',
-      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', 
-      backgroundColor: 'white',
-      padding: 0,
-      margin: 0
-    }}>
-      <AppBar position="static" sx={{ backgroundColor: '#B69062', width: '100%' }}>
-        <Toolbar>
-          <h3 style={{ flexGrow: 1, marginTop: '12px', color: 'white' }}>SkInsight Assistant</h3>
-          <IconButton edge="end" color="inherit" onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Grid direction="column" style={{ flexGrow: 1, overflowY: 'auto', padding: '16px' }}>
-        {messages.map((message, index) => (
-          <Message key={index} message={message} onMessageClick={handleSuggestedMessageClick} />
-        ))}
-        <div ref={messagesEndRef} />
-      </Grid>
-      <Grid direction="column" style={{flexGrow: 1}}>
+    <Layout
+      style={{
+        position: "fixed",
+        bottom: "150px",
+        right: "50px",
+        width: "350px",
+        height: "500px",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "white",
+      }}
+    >
+      <Header
+        style={{
+          backgroundColor: "#B69062",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Title level={4} style={{ color: "white", margin: 0 }}>
+          SkInsight Assistant
+        </Title>
+        <Button
+          type="text"
+          icon={<CloseOutlined />}
+          onClick={handleClose}
+          style={{ color: "white" }}
+        />
+      </Header>
+
+      <Content style={{ padding: "16px", overflowY: "auto", flexGrow: 1 }}>
+        <Space direction="vertical" style={{ width: "100%" }}>
+          {messages.map((message, index) => (
+            <Message
+              key={index}
+              message={message}
+              onMessageClick={handleSuggestedMessageClick}
+            />
+          ))}
+          <div ref={messagesEndRef} />
+        </Space>
+      </Content>
+
+      <Footer style={{ padding: "16px", position: "relative" }}>
         {isWaiting && (
-            <div style={{ position: 'absolute', bottom: '100px', left: '20px' }}>
-              <CircularProgress size={18} />
-            </div>
-          )}
-      </Grid>
-      <Grid container item spacing={2} style={{ padding: '16px' }}>
-        <Grid item xs={10}>
-          <TextField
-            label="Type your message"
-            variant="outlined"
-            fullWidth
+          <Spin
+            style={{ position: "absolute", bottom: "50px", left: "10px" }}
+            size="small"
+          />
+        )}
+        <Space style={{ width: "100%" }}>
+          <TextArea
+            rows={1}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onPressEnter={handleKeyPress}
+            placeholder="Type your message..."
+            autoSize={{ minRows: 1, maxRows: 4 }}
           />
-        </Grid>
-        <Grid item xs={2}>
-          <IconButton onClick={handleSendMessage} style={{ color: '#B69062', marginTop: '8px' }}>
-            <SendIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </Container>
+          <Button
+            type="primary"
+            icon={<SendOutlined />}
+            onClick={handleSendMessage}
+            style={{ backgroundColor: "#B69062", borderColor: "#B69062" }}
+          />
+        </Space>
+      </Footer>
+    </Layout>
   );
 };
 

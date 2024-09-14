@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chat from "./components/Chat";
 import axios from "axios";
+import { Button, Typography, Layout, Space } from "antd";
+
+const { Title, Text } = Typography;
+const { Sider, Content } = Layout;
 
 const Profile = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -64,38 +68,44 @@ const Profile = () => {
   }, [threadId]);
 
   return (
-    <div className="app-container">
-      <div className="profile-sidebar">
-        <h2>Profile</h2>
-        <p>
-          <strong>Name:</strong> User's Name
-        </p>
-        <p>
-          <strong>Skin Type:</strong> User's Skin Type
-        </p>
-        <p>
-          <strong>Skin Conditions:</strong> User's Conditions
-        </p>
-        <p>
-          <strong>Skin Concerns:</strong> User's Concerns
-        </p>
-        <div className="chat-launcher">
-          <button onClick={handleChatToggle}>
+    <Layout className="app-container">
+      <Sider width={300} className="profile-sidebar">
+        <Title level={2}>Profile</Title>
+        <Space direction="vertical">
+          <Text>
+            <strong>Name:</strong> User's Name
+          </Text>
+          <Text>
+            <strong>Skin Type:</strong> User's Skin Type
+          </Text>
+          <Text>
+            <strong>Skin Conditions:</strong> User's Conditions
+          </Text>
+          <Text>
+            <strong>Skin Concerns:</strong> User's Concerns
+          </Text>
+        </Space>
+        <div className="chat-launcher" style={{ marginTop: "20px" }}>
+          <Button type="primary" onClick={handleChatToggle}>
             Talk to our dermatology assistant
-          </button>
+          </Button>
         </div>
-      </div>
-      {isChatOpen && (
-        <Chat
-          handleClose={handleChatToggle}
-          assistantId={assistantId}
-          messages={messages}
-          setMessages={setMessages}
-          threadId={threadId}
-          setThreadId={setThreadId}
-        />
-      )}
-    </div>
+      </Sider>
+      <Layout>
+        <Content>
+          {isChatOpen && (
+            <Chat
+              handleClose={handleChatToggle}
+              assistantId={assistantId}
+              messages={messages}
+              setMessages={setMessages}
+              threadId={threadId}
+              setThreadId={setThreadId}
+            />
+          )}
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 
