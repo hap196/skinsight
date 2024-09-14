@@ -20,11 +20,17 @@ const Profile = () => {
     const savedThread = sessionStorage.getItem("threadId");
     return savedThread ? JSON.parse(savedThread) : "";
   });
+  const [userName, setUserName] = useState("Guest");
   const hasInitializedRef = useRef(false);
+
+  // send cookies with requests
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
     if (!hasInitializedRef.current) {
       initChatBot();
+      // fetch user name
+      fetchUserName();
       hasInitializedRef.current = true;
     }
     if (messages.length === 0) {
@@ -43,9 +49,30 @@ const Profile = () => {
     }
   }, []);
 
+  // fetch the user's name from the backend
+  const fetchUserName = async () => {
+    try {
+      const response = await axios.get("http://localhost:5001/profile");
+      if (response.data.name) {
+        setUserName(response.data.name);
+      } else {
+        console.log("User is not logged in:", response.data.error);
+        setUserName("Guest");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.error("User not logged in:", error.response.data);
+        // redirect to login page if not logged in
+        window.location.href = "http://localhost:5001/login";
+      } else {
+        console.error("Error fetching user name:", error.message);
+      }
+    }
+  };
+
   const fetchAssistant = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/get_assistant");
+      const response = await axios.get("http://localhost:5000/get_assistant");
       return response.data;
     } catch (error) {
       console.error("Error fetching assistant:", error);
@@ -55,7 +82,7 @@ const Profile = () => {
   const initChatBot = async () => {
     const data = await fetchAssistant();
     console.log("Assistant initiated");
-    setAssistantId(data.assistant_id);
+    setAssistantId(data?.assistant_id || null);
   };
 
   const handleChatToggle = () => {
@@ -117,7 +144,8 @@ const Profile = () => {
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Title level={3} style={{ color: 'black' }}>Name's Profile</Title>
+          {/* Replace static text with the user's name */}
+          <Title level={3} style={{ color: 'black' }}>{userName}'s Profile</Title>
           <Button
             type="text"
             icon={isCollapsed ? <UpOutlined /> : <LeftOutlined />}

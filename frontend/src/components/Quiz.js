@@ -9,6 +9,7 @@ import {
   FrownOutlined,
   MehOutlined,
 } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./Quiz.css";
 
 const stepsData = [
@@ -21,6 +22,7 @@ const SkinAIForm = () => {
   const [currentStep, setCurrentStep] = useState(0); // Step tracker
   const [formData, setFormData] = useState({}); // Store form answers
   const [currentQuestion, setCurrentQuestion] = useState(0); // Tracks the specific question in the Questions step
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   const questions = [
     {
@@ -96,6 +98,14 @@ const SkinAIForm = () => {
     }
   };
 
+  const handleImageUpload = () => {
+    // Simulate image upload success
+    message.success("File uploaded successfully");
+
+    // After successful upload, navigate to the profile page
+    navigate("/profile");
+  };
+
   return (
     <div className="form-container">
       <Steps current={currentStep}>
@@ -123,7 +133,7 @@ const SkinAIForm = () => {
               <Col span={8} key={option}>
                 <div
                   className="option-box"
-                  onClick={() => handleSelect(currentQuestion, option)}
+                  onClick={() => handleSelect(option)}
                 >
                   {questions[currentQuestion].icons &&
                     questions[currentQuestion].icons[index]}
@@ -152,11 +162,8 @@ const SkinAIForm = () => {
         <div>
           <h3>Upload a clear image of your skin</h3>
           <p>Ensure the image is clear for better analysis.</p>
-          {/* Add Upload component */}
-          <Button
-            type="primary"
-            onClick={() => message.success("File uploaded successfully")}
-          >
+          {/* Image Upload functionality */}
+          <Button type="primary" onClick={handleImageUpload}>
             Upload Image
           </Button>
         </div>

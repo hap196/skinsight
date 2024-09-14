@@ -14,7 +14,10 @@ import db
 
 ######## CREATE APP + DATABASE ########
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+app.config['SESSION_TYPE'] = 'filesystem'
+# secret key for session management
+app.secret_key = 'secret_key'
 oauth = OAuth(app)
 
 ####### TEST ######
@@ -26,9 +29,6 @@ oauth = OAuth(app)
 # initialize gpt chat instance
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
-# secret key for session management
-app.secret_key = 'secret_key'
 
 # setup oauth
 oauth = OAuth(app)
@@ -68,6 +68,7 @@ def auth_callback():
 
     # store the user in session
     session["user"] = user_info
+    print("Session after login:", session["user"])
     return redirect("http://localhost:3000/quiz")
 
 @app.route("/logout")
@@ -79,9 +80,15 @@ def logout():
 def profile():
     user = session.get("user")
     if user:
-        return jsonify(user)
+        response = jsonify(user)
     else:
-        return jsonify({"error": "User not logged in"}), 401
+        response = jsonify({"error": "User not logged in"}), 401
+
+    # Add necessary CORS headers to allow credentials
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    return response
+
 
 # load model and encoder
 model = load_model("skin_classifier.h5")
@@ -98,7 +105,6 @@ def preprocess_image(img, target_size):
     img = np.expand_dims(img, axis=0)
     img = tf.keras.applications.resnet50.preprocess_input(img)
     return img
-
 
 # function to prompt and get a response from gpt (later to be replaced with a live chatbot)
 def get_skincare_recs(predicted_disease):
