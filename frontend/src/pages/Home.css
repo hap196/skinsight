@@ -11,7 +11,7 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'OtherFont', sans-serif; /* Default font for the page */
+    font-family: 'OtherFont', sans-serif;
 }
 
 .home {
@@ -28,14 +28,20 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .section1 h1 {
-    font-family: 'CustomFont', sans-serif; /* Custom font for the main title */
+    font-family: 'CustomFont', sans-serif;
     font-size: 8rem;
     letter-spacing: 6px;
     font-weight: lighter;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
 }
 
 .section1 h1 span {
@@ -47,7 +53,11 @@ body, html {
     font-size: 2.5rem;
     font-weight: 300;
     letter-spacing: 8px;
+    top: 30%;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    position: relative;
+    margin-top: 0;
+    z-index: 0;
 }
 
 .section2, .section3 {
@@ -59,7 +69,7 @@ body, html {
 }
 
 .section2 p {
-    font-family: 'OtherFont', sans-serif; /* Different font for section 2 text */
+    font-family: 'OtherFont', sans-serif;
 }
 
 .section3 {
@@ -74,17 +84,24 @@ body, html {
 
 button {
     padding: 10px;
-    width: 200px;
+    width: 225px;
     border-radius: 30px;
     font-size: 14px;
     cursor: pointer;
 }
 
-/* New styles for the GET STARTED button */
 .section1 .get-started-button {
     background-color: white;
-    color: tan;
+    color: #9c7a50;
     border: none;
     font-family: 'OtherFont', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    letter-spacing: 1.5px;
+    margin-top: 200px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.section1 .get-started-button:hover {
+    background-color: #F3E4C7;
 }
