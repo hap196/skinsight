@@ -1,0 +1,45 @@
+/* src/components/Message.css */
+.message-container {
+    margin: 8px;
+  }
+  
+  .suggested-message {
+    display: inline-block;
+    background-color: none;
+    padding: 10px;
+    border-radius: 18px;
+    color: #5C4E42;
+    max-width: 80%;
+    word-wrap: break-word;
+    text-align: left;
+    border: 2px solid #5C4E42;
+    cursor: pointer;
+    z-index: 9999;
+  }
+  
+  .suggested-message:hover {
+    background-color: #cecece;
+  }
+  
+  .user-message {
+    display: inline-block;
+    background-color: #B69062;
+    padding: 10px;
+    border-radius: 18px;
+    color: white;
+    max-width: 80%;
+    word-wrap: break-word;
+    text-align: left;
+  }
+  
+  .other-message {
+    display: inline-block;
+    background-color: #69635d;
+    padding: 10px;
+    border-radius: 18px;
+    color: white;
+    max-width: 80%;
+    word-wrap: break-word;
+    text-align: left;
+  }
+  

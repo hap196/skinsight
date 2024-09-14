@@ -2,11 +2,13 @@ import os
 import time
 import re
 from flask import Flask, request, jsonify, make_response
+from flask_cors import CORS
 from openai import OpenAI
 import json
 import logging
 
 app = Flask(__name__)
+CORS(app)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
