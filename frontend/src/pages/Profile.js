@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Chat from "./components/Chat";
 import axios from "axios";
 import "./Profile.css";
-import { Button, Typography, Space, Layout } from "antd";  // Added Layout here
-import { UpOutlined, LeftOutlined } from "@ant-design/icons";
+import { Button, Typography, Space } from "antd";
 
-const { Sider, Content } = Layout;
 const { Title, Text } = Typography;
 
 const Profile = ({
@@ -84,7 +82,6 @@ const Profile = ({
   const fetchAssistant = async () => {
     try {
       const response = await axios.get("http://localhost:5000/get_assistant");
-      console.log("data", response.data)
       return response.data;
     } catch (error) {
       console.error("Error fetching assistant:", error);
@@ -94,7 +91,7 @@ const Profile = ({
   const initChatBot = async () => {
     const data = await fetchAssistant();
     console.log("Assistant initiated");
-    setAssistantId(data.assistant_id);
+    setAssistantId(data?.assistant_id || null);
   };
 
   useEffect(() => {
@@ -110,63 +107,19 @@ const Profile = ({
   };
 
   return (
-    <Layout className="app-container" style={{ height: '100vh', backgroundColor: '#F3E4C7' }}>
-      {/* Collapsed arrow */}
-      {isCollapsed && (
-        <Button
-          type="text"
-          onClick={toggleCollapse}
+    <div>
+    <div className={`profile-sidebar ${isCollapsed ? "collapsed" : ""}`}>
+      <div className="profile-content">
+        <div
           style={{
-            position: 'absolute',
-            top: '50px',
-            left: '0px',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: 'black',
-            display: 'flex',
-            alignItems: 'center',
-            transform: 'rotate(90deg)',
-            zIndex: 1000,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <UpOutlined style={{ marginRight: '5px' }} />
-          View Profile
-        </Button>
-      )}
-
-      <Sider
-        width={300}
-        className="profile-sidebar"
-        collapsible
-        collapsed={isCollapsed}
-        collapsedWidth={0}
-        trigger={null}
-        style={{
-          backgroundColor: '#F3E4C7',
-          color: 'black',
-          height: '100vh',
-          padding: '20px',
-          overflow: 'hidden',
-          transition: 'transform 0.3s ease',
-          transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {/* Replace static text with the user's name */}
-          <Title level={3} style={{ color: 'black' }}>{userName}'s Profile</Title>
-          <Button
-            type="text"
-            icon={isCollapsed ? <UpOutlined /> : <LeftOutlined />}
-            shape="circle"
-            onClick={toggleCollapse}
-            style={{
-              color: 'black',
-              fontSize: '16px',
-              borderRadius: '50%',
-              border: 'none',
-              color: 'black'
-            }}
-          />
+          <Title level={3} className="profile-sidebar-title">
+            {userName}'s Profile
+          </Title>
         </div>
         <Space direction="vertical" style={{ width: "100%" }}>
           <div className="profile-section">
@@ -190,27 +143,31 @@ const Profile = ({
             </Text>
           </div>
         </Space>
-        <div className="chat-launcher" style={{ marginTop: "20px", textAlign: 'center' }}>
-        <Button className="brown-button" onClick={handleChatToggle}>
+        <div className="chat-launcher">
+          <Button
+            className="brown-button"
+            onClick={() => setIsChatOpen(!isChatOpen)}
+          >
             Talk to our dermatology assistant
-        </Button>
+          </Button>
         </div>
-      </Sider>
-      <Layout>
-        <Content style={{ padding: '20px' }}>
-          {isChatOpen && (
-            <Chat
-              handleClose={handleChatToggle}
-              assistantId={assistantId}
-              messages={messages}
-              setMessages={setMessages}
-              threadId={threadId}
-              setThreadId={setThreadId}
-            />
-          )}
-        </Content>
-      </Layout>
-    </Layout>
+      </div>
+    </div>
+    <div className="chatbox-container">
+    {isChatOpen && (
+      <div>
+        <Chat
+          handleClose={handleChatToggle}
+          assistantId={assistantId}
+          messages={messages}
+          setMessages={setMessages}
+          threadId={threadId}
+          setThreadId={setThreadId}
+        />
+      </div>
+    )}
+    </div>
+    </div>
   );
 };
 

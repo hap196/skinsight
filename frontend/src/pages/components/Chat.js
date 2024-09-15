@@ -103,7 +103,7 @@ const Chat = ({
         }}
       >
         <Title level={4} style={{ color: "white", margin: 0 }}>
-          SkInsight Assistant
+          Skinsight Assistant
         </Title>
         <Button
           type="text"
