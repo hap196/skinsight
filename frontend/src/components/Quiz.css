@@ -9,7 +9,7 @@
 }
 
 body {
-  background-color: var(--very-light);
+  background-color: var(--background);
 }
 
 .page-title {
@@ -38,6 +38,10 @@ body {
   text-align: center;
 }
 
+.options {
+  margin-bottom: 20vh;
+}
+
 .option-circle {
   border-radius: 50%;
   transition: all 0.3s ease;
@@ -51,7 +55,7 @@ body {
 }
 
 .option-circle.selected {
-  border: 3px solid #3dbdb0;;
+  border: 3px solid white;
 }
 
 .option-text {
@@ -59,16 +63,19 @@ body {
   color: white;
   text-align: center;
   font-family: 'OtherFont', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 18px;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
   letter-spacing: 2px; /* Adjust letter spacing if needed */
-  z-index: 1;
   width: 220px;
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust to center */
   word-break: break-word; /* Break text if too long */
+}
+
+.option-text:hover {
+  cursor: pointer;
 }
 
 .navigation-buttons {
@@ -99,37 +106,28 @@ p {
   text-align: center;
 }
 
-.nav-link {
-  color: var(--accent);
-  text-decoration: none;
-  font-size: 1.5rem;
-  font-weight: 600;
-  transition: color 0.3s ease;
-  margin-top: 20px;
-  margin-bottom: 100px;
-  text-align: center; /* Center the link */
-  display: block; /* Ensure it occupies its own line */
-}
-
-.nav-link:hover {
-  color: var(--accent-hover);
-  cursor: pointer;
-}
-
-.ant-steps {
-  max-width: 600px;
-  margin: 0 auto 24px;
-}
-
-.ant-steps-horizontal {
+.fixed-navigation {
+  position: fixed;
+  font-weight: 300;
+  letter-spacing: 2px;
+  bottom: 40px; /* Adjust this value for distance from the bottom */
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: space-between;
+  width: 1200px; /* Adjust the width based on your preference */
+}
+
+.fixed-navigation .nav-link {
+  cursor: pointer;
+  font-size: 24px;
+  color: black;
+}
+
+.fixed-navigation .nav-link:hover {
+  color: #6b4b3f;
 }
 
 .ant-steps-item {
   flex: 1;
-}
-.ant-steps-item-process .ant-steps-item-icon {
-  background-color: var(--accent) !important; 
-  border-color: var(--accent) !important; 
 }

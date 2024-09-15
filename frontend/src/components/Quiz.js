@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Row, Col, message, Carousel, Steps, Upload, Button } from "antd";
-import { CheckCircleOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, LeftOutlined, RightOutlined, UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Quiz.css";
 import dryImg from "../assets/buttons/dry.svg";
@@ -107,29 +107,79 @@ const SkinAIForm = () => {
   };
 
   const handleNext = () => {
-    const totalQuestions = currentStep === 1 ? medicalQuestions.length : lifestyleQuestions.length;
-    if (currentQuestion < totalQuestions - 1) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    if (currentStep === 0) {
+      setCurrentStep(1);
+    } else if (currentStep === 1 && currentQuestion < medicalQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       carouselRef.current.next();
-    } else if (currentStep === 1) {
-      setCurrentStep(2); // Move to Lifestyle after Medical
+    } else if (currentStep === 1 && currentQuestion === medicalQuestions.length - 1) {
+      setCurrentStep(2);
       setCurrentQuestion(0); // Reset question index for lifestyle
-    } else {
-      setCurrentStep(currentStep + 1);
+    } else if (currentStep === 2 && currentQuestion < lifestyleQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      carouselRef.current.next();
+    } else if (currentStep === 2 && currentQuestion === lifestyleQuestions.length - 1) {
+      setCurrentStep(3); // Move to upload image step
     }
   };
 
   const handleBack = () => {
-    if (currentQuestion > 0) {
+    if (currentStep === 3) {
+      setCurrentStep(2); // Go back to lifestyle questions
+      setCurrentQuestion(lifestyleQuestions.length - 1); // Go to the last lifestyle question
+    } else if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
       carouselRef.current.prev();
     } else if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      setCurrentQuestion(currentStep === 2 ? lifestyleQuestions.length - 1 : medicalQuestions.length - 1); // Handle step transitions
+      if (currentStep === 2) {
+        setCurrentQuestion(medicalQuestions.length - 1);
+      } else if (currentStep === 1) {
+        setCurrentQuestion(0);
+      }
     }
   };
 
+  const handleUpload = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
   const renderStep = () => {
+    if (currentStep === 0) {
+      return (
+        <div className="form-content">
+          <h3 className="question-title">Login</h3>
+          <div>
+            <a className="nav-link" onClick={handleNext}>
+              Login
+            </a>
+            {" | "}
+            <a className="nav-link" onClick={handleNext}>
+              Skip
+            </a>
+          </div>
+        </div>
+      );
+    }
+
+    if (currentStep === 3) {
+      return (
+        <div className="form-content">
+          <h3 className="question-title">Upload an image of your skin concern</h3>
+          <Upload
+            fileList={fileList}
+            onChange={handleUpload}
+            listType="picture"
+            beforeUpload={() => false}
+          >
+            <Button icon={<UploadOutlined />}>Select Image</Button>
+          </Upload>
+        </div>
+      );
+    }
+
     const questions = currentStep === 1 ? medicalQuestions : lifestyleQuestions;
     return (
       <div className="form-content">
@@ -153,14 +203,6 @@ const SkinAIForm = () => {
             </div>
           ))}
         </Carousel>
-        <div className="navigation-buttons">
-          <a className="nav-link" onClick={handleBack}>
-            <LeftOutlined /> Back
-          </a>
-          <a className="nav-link" onClick={handleNext}>
-            Next <RightOutlined />
-          </a>
-        </div>
       </div>
     );
   };
@@ -174,13 +216,20 @@ const SkinAIForm = () => {
             <Steps.Step
               key={index}
               title={step.title}
-              icon={currentStep > index ? <CheckCircleOutlined /> : undefined}
-              style={{ color: currentStep === index ? '#3dbdb0' : '' }} // Teal for active step
+              style={{ color: currentStep === index ? "#3dbdb0" : "" }}
             />
           ))}
         </Steps>
       </div>
       <div className="form-container">{renderStep()}</div>
+      <div className="fixed-navigation">
+        <a className="nav-link" onClick={handleBack}>
+          <LeftOutlined /> BACK
+        </a>
+        <a className="nav-link" onClick={handleNext}>
+          NEXT <RightOutlined />
+        </a>
+      </div>
     </div>
   );
 };
