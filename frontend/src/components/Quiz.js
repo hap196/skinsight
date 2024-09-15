@@ -4,15 +4,15 @@ import { Row, Col, message, Carousel, Steps, Upload, Button } from "antd";
 import { CheckCircleOutlined, LeftOutlined, RightOutlined, UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Quiz.css";
-import button1 from "../assets/buttons/button1.svg";
-import button2 from "../assets/buttons/button2.svg";
-import button3 from "../assets/buttons/button3.svg";
-import button4 from "../assets/buttons/button4.svg";
-import button5 from "../assets/buttons/button5.svg";
-import button6 from "../assets/buttons/button6.svg";
-import button7 from "../assets/buttons/button7.svg";
-import button8 from "../assets/buttons/button8.svg";
-import button9 from "../assets/buttons/button9.svg";
+import button1 from "../assets/buttons/button1.png";
+import button2 from "../assets/buttons/button2.png";
+import button3 from "../assets/buttons/button3.png";
+import button4 from "../assets/buttons/button4.png";
+import button5 from "../assets/buttons/button5.png";
+import button6 from "../assets/buttons/button6.png";
+import button7 from "../assets/buttons/button7.png";
+import button8 from "../assets/buttons/button8.png";
+import button9 from "../assets/buttons/button9.png";
 
 const SkinAIForm = () => {
   const [formData, setFormData] = useState({});
