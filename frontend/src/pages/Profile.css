@@ -1,66 +1,67 @@
-/* Profile.css */
+
+.ant-layout-sider {
+  background-color: #F3E4C7 !important;
+}
+
 
 .app-container {
-    height: 100vh;
-    background-color: #F3E4C7;
-  }
-  
-  .profile-sidebar {
-    background-color: #F3E4C7;
-    color: black;
-    height: 100vh;
-    padding: 20px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-  }
-  
-  .profile-sidebar.collapsed {
-    transform: translateX(-100%);
-  }
-  
-  .collapsed-button {
-    position: absolute;
-    top: 50px;
-    left: 0px;
-    border: none;
-    background-color: transparent;
-    color: black;
-    display: flex;
-    align-items: center;
-    transform: rotate(90deg);
-    z-index: 1000;
-  }
-  
-  .profile-sidebar-title {
-    color: black;
-  }
-  
-  .edit-button {
-    color: black;
-  }
-  
-  .chat-launcher {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .brown-button {
-    background-color: #8B4513; /* Adjust color as needed */
-    color: white;
-  }
-  
-  .profile-text {
-    color: black;
-  }
-  
-  .profile-section {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .profile-label {
-    color: black;
-    margin-right: 10px;
-  }
-  
+  height: 100vh;
+  background-color: #F3E4C7;
+}
+
+.profile-sidebar {
+  background-color: #F3E4C7;
+  height: 100vh;
+  padding: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.profile-sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+.collapsed-button {
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  transform: rotate(90deg);
+  z-index: 1000;
+}
+
+.profile-sidebar-title {
+  color: black;
+}
+
+.edit-button {
+  color: black;
+}
+
+.chat-launcher {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.brown-button {
+  background-color: #8B4513;
+  color: white;
+}
+
+.profile-text {
+  color: black;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-label {
+  color: black;
+  margin-right: 10px;
+}
