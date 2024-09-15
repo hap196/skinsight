@@ -85,10 +85,10 @@ const Chat = ({
     <Layout
       style={{
         position: "fixed",
-        bottom: "50px",
+        bottom: "200px",
         right: "50px",
-        width: "350px",
-        height: "500px",
+        width: "330px",
+        height: "450px",
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
         backgroundColor: "white",
       }}
