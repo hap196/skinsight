@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chat from "./components/Chat";
 import axios from "axios";
-import './Profile.css';
-import { Button, Typography, Layout, Space } from "antd";
-import { UpOutlined, LeftOutlined, EditOutlined } from '@ant-design/icons'; // Import Edit icon
+import "./Profile.css";
+import { Button, Typography, Space, Layout } from "antd";  // Added Layout here
+import { UpOutlined, LeftOutlined } from "@ant-design/icons";
 
-const { Title, Text } = Typography;
 const { Sider, Content } = Layout;
+const { Title, Text } = Typography;
 
-const Profile = () => {
+const Profile = ({
+  identifiedSkinCondition,
+  skinConcerns,
+  isCollapsed,
+  toggleCollapse,
+}) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false); // State to control sidebar collapse
   const [assistantId, setAssistantId] = useState(null);
   const [messages, setMessages] = useState(() => {
     const savedMessages = sessionStorage.getItem("messages");
@@ -21,16 +25,26 @@ const Profile = () => {
     return savedThread ? JSON.parse(savedThread) : "";
   });
   const [userName, setUserName] = useState("Guest");
+
+  const question_labels = [
+    "What are your skin concerns?",
+    "Do you have sensitive skin?",
+    "Where is your main concern?",
+  ];
+  const [userAttributes, setUserAttributes] = useState(
+    question_labels.reduce((acc, label) => {
+      acc[label] = null;
+      return acc;
+    }, {})
+  );
   const hasInitializedRef = useRef(false);
 
-  // send cookies with requests
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
     if (!hasInitializedRef.current) {
       initChatBot();
-      // fetch user name
-      fetchUserName();
+      fetchUserAttributes();
       hasInitializedRef.current = true;
     }
     if (messages.length === 0) {
@@ -49,23 +63,20 @@ const Profile = () => {
     }
   }, []);
 
-  // fetch the user's name from the backend
-  const fetchUserName = async () => {
+  const fetchUserAttributes = async () => {
     try {
       const response = await axios.get("http://localhost:5001/profile");
       if (response.data.name) {
         setUserName(response.data.name);
       } else {
-        console.log("User is not logged in:", response.data.error);
         setUserName("Guest");
+      }
+      if (response.data.quiz_attributes) {
+        setUserAttributes(response.data.quiz_attributes);
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        console.error("User not logged in:", error.response.data);
-        // redirect to login page if not logged in
         window.location.href = "http://localhost:5001/login";
-      } else {
-        console.error("Error fetching user name:", error.message);
       }
     }
   };
@@ -73,6 +84,7 @@ const Profile = () => {
   const fetchAssistant = async () => {
     try {
       const response = await axios.get("http://localhost:5000/get_assistant");
+      console.log("data", response.data)
       return response.data;
     } catch (error) {
       console.error("Error fetching assistant:", error);
@@ -82,15 +94,7 @@ const Profile = () => {
   const initChatBot = async () => {
     const data = await fetchAssistant();
     console.log("Assistant initiated");
-    setAssistantId(data?.assistant_id || null);
-  };
-
-  const handleChatToggle = () => {
-    setIsChatOpen(!isChatOpen);
-  };
-
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
+    setAssistantId(data.assistant_id);
   };
 
   useEffect(() => {
@@ -100,6 +104,10 @@ const Profile = () => {
   useEffect(() => {
     sessionStorage.setItem("threadId", JSON.stringify(threadId));
   }, [threadId]);
+
+  const handleChatToggle = () => {
+    setIsChatOpen(!isChatOpen);
+  };
 
   return (
     <Layout className="app-container" style={{ height: '100vh', backgroundColor: '#F3E4C7' }}>
@@ -160,49 +168,25 @@ const Profile = () => {
             }}
           />
         </div>
-        <Space direction="vertical">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
+        <Space direction="vertical" style={{ width: "100%" }}>
+          <div className="profile-section">
+            <Text className="profile-label">
               <strong>Skin Conditions:</strong>
             </Text>
-            <Button
-              type="text"
-              style={{ color: 'black' }}
-            />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              TODO: populate skin conditions
+          <div style={{ marginBottom: "10px" }}>
+            <Text style={{ color: "black" }}>
+              {identifiedSkinCondition || "No skin condition identified."}
             </Text>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              <strong>Skin Type:</strong>
-            </Text>
-            <Button
-              type="text"
-              icon={<EditOutlined />}
-              style={{ color: 'black' }}
-            />
-          </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              TODO: populate skin type
-            </Text>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
+          <div className="profile-section">
+            <Text className="profile-label">
               <strong>Skin Concerns:</strong>
             </Text>
-            <Button
-              type="text"
-              icon={<EditOutlined />}
-              style={{ color: 'black' }}
-            />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              TODO: populate skin concerns
+          <div style={{ marginBottom: "10px" }}>
+            <Text style={{ color: "black" }}>
+              {skinConcerns || "No skin concerns inputted."}
             </Text>
           </div>
         </Space>

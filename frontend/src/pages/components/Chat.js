@@ -25,7 +25,7 @@ const Chat = ({
   // Send a message and receive the chatbot's response
   const fetchMessage = async (input) => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/send_message', { input, threadId });
+      const response = await axios.post('http://127.0.0.1:5000/send_message', { input, threadId, withCredentials: true, });
       setThreadId(response.data.threadId);
       return response.data;
     } catch (error) {
