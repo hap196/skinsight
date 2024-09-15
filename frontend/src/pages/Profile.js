@@ -74,7 +74,7 @@ const Profile = () => {
         // redirect to login page if not logged in
         window.location.href = "http://localhost:5001/login";
       } else {
-        console.error("Error fetching user name:", error.message);
+        console.error("Error fetching user attributes:", error.message);
       }
     }
   };
