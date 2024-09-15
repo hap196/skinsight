@@ -71,6 +71,14 @@ html {
   width: 100vw;
 }
 
+.routines ol {
+  font-family: "OtherFont", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  line-height: normal;
+}
+
 .daytime-container,
 .nighttime-container {
   position: absolute;
@@ -78,7 +86,7 @@ html {
 }
 
 .daytime-container {
-  top: 0;
+  top: 10%;
   left: 10%;
 }
 
@@ -169,10 +177,51 @@ html {
 }
 
 .brown-button {
-  background-color: #8B4513;
-  color: white;
+  background-color: transparent;
+  color: black;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 20px;
+  border: none;
   cursor: pointer;
   font-family: "OtherFont", sans-serif;
+  margin-bottom: 10%;
+}
+
+.vinyl-player {
+  position: absolute; /* Ensure positioning context for child elements */
+  width: 200px;
+  height: 200px; /* Set a height to contain child elements */
+  bottom: 5%;
+  right: 0%;
+}
+
+.vinyl-base {
+  position: absolute; /* Positioned relative to .vinyl-player */
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  z-index: 1; /* Base image in the background */
+}
+
+.vinyl-record {
+  position: absolute; /* Positioned relative to .vinyl-player */
+  bottom: 20px; /* Adjust position as needed */
+  right: 80px; /* Adjust position as needed */
+  width: 50%; /* Adjust width as needed */
+  cursor: pointer;
+  transition: transform 0.5s linear;
+  z-index: 2; /* Record image in the middle */
+}
+
+.vinyl-record.spinning {
+  transform: rotate(360deg); /* Spin animation */
+}
+
+.vinyl-needle {
+  position: absolute; /* Positioned relative to .vinyl-player */
+  bottom: 40px; /* Adjust position as needed */
+  right: 20px; /* Adjust position as needed */
+  width: 60%; /* Adjust width as needed */
+  z-index: 3; /* Needle image in the foreground */
 }

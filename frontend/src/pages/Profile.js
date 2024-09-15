@@ -158,20 +158,20 @@ const Profile = ({
         </div>
       </div>
     </div>
-    <div className="chatbox-container">
-    {isChatOpen && (
-      <div>
-        <Chat
-          handleClose={handleChatToggle}
-          assistantId={assistantId}
-          messages={messages}
-          setMessages={setMessages}
-          threadId={threadId}
-          setThreadId={setThreadId}
-        />
+      <div className="chatbox-container">
+      {isChatOpen && (
+        <div>
+          <Chat
+            handleClose={handleChatToggle}
+            assistantId={assistantId}
+            messages={messages}
+            setMessages={setMessages}
+            threadId={threadId}
+            setThreadId={setThreadId}
+          />
+        </div>
+      )}
       </div>
-    )}
-    </div>
     </div>
   );
 };
