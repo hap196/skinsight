@@ -8,21 +8,45 @@ import Profile from "./Profile";
 
 const Results = () => {
   const location = useLocation();
-  let { prediction, gptResponse } = location.state || {};
+  const { prediction, gptResponse: gptResponseRaw, audio_url } = location.state || {}; 
 
-  if (typeof gptResponse === "string") {
-    try {
-      gptResponse = JSON.parse(gptResponse);
-    } catch (error) {
-      console.error("Failed to parse GPT response:", error);
-      gptResponse = {};
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio, setAudio] = useState(null);
+  const [gptResponse, setGptResponse] = useState({});
+
+  // Parse GPT response if it's a string
+  useEffect(() => {
+    if (typeof gptResponseRaw === "string") {
+      try {
+        setGptResponse(JSON.parse(gptResponseRaw));
+      } catch (error) {
+        console.error("Failed to parse GPT response:", error);
+        setGptResponse({});
+      }
+    } else {
+      setGptResponse(gptResponseRaw || {});
     }
-  }
+  }, [gptResponseRaw]);
+
+  // initialize the audio object when audio_url is available
+  useEffect(() => {
+    if (audio_url) {
+      const audioInstance = new Audio(audio_url);
+      // store audio instance for playback control
+      setAudio(audioInstance);
+
+      return () => {
+        audioInstance.pause();
+        audioInstance.currentTime = 0;
+      };
+    }
+  }, [audio_url]);
+
 
   const ingredients = gptResponse?.ingredients || {};
   const morning = gptResponse?.morning || "";
   const night = gptResponse?.night || "";
-  const [isProfileOpen, setIsProfileOpen] = useState(true); // Default to closed
+  const [isProfileOpen, setIsProfileOpen] = useState(true);
 
   const toggleProfile = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -140,6 +164,18 @@ const Results = () => {
         ) : (
           <p>No product recommendations available.</p>
         )}
+        {/* Audio Player */}
+      {audio_url ? (
+        <div className="song-controls">
+          <h3>Your Generated Song</h3>
+          <audio id="background-audio" controls autoPlay loop>
+            <source src={audio_url} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      ) : (
+        <p>Sorry, no audio is available yet.</p>
+      )}
       </section>
 
       <section className="section routines">

@@ -7,6 +7,7 @@ from PIL import Image
 import io
 import pickle
 import openai
+import requests
 from openai import OpenAI
 import os
 from authlib.integrations.flask_client import OAuth
@@ -36,6 +37,11 @@ oauth = OAuth(app)
 # initialize gpt chat instance
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+####### SUNO STUFF #########
+API_TOKEN = "ev1bT0aXN60JvSjzbdJdHrSq2snAMDh7"
+BASE_URL_GENERATE = "https://studio-api.suno.ai/api/generate/v2/"
+BASE_URL_FEED = "https://studio-api.suno.ai/api/feed/v2/?id="
 
 # setup oauth
 oauth = OAuth(app)
@@ -79,6 +85,28 @@ def auth_callback():
     session["user"] = user_info
     print("Session after login:", session["user"])
     return redirect("http://localhost:3000/quiz")
+
+# Endpoint to check the status of the audio file
+@app.route('/check_audio/<song_id>', methods=['GET'])
+def check_audio(song_id):
+    headers = {
+        "Authorization": f"Bearer {API_TOKEN}",
+        "Content-Type": "application/json"
+    }
+
+    # Poll Suno API to check if the audio is ready
+    feed_response = requests.get(f"{BASE_URL_FEED}{song_id}", headers=headers)
+
+    if feed_response.status_code == 200:
+        clips = feed_response.json().get("clips", [])
+        if clips and clips[0].get("audio_url"):
+            audio_url = clips[0].get("audio_url", "")
+            print(f"Audio URL: {audio_url}")  # Print the audio URL in the console
+            return jsonify({"audio_url": audio_url}), 200
+        else:
+            return jsonify({"audio_url": None}), 200
+    else:
+        return jsonify({"error": "Error checking audio"}), 500
 
 @app.route("/saveQuizData", methods=["POST"])
 def save_quiz_data():
@@ -172,6 +200,34 @@ def get_skincare_recs(predicted_disease, conditions_dict):
     except Exception as e:
         print(f"Error in get_skincare_recs: {str(e)}")
         return f"Unable to generate recommendations due to: {str(e)}"
+    
+# Endpoint to generate a song
+@app.route('/generate', methods=['POST'])
+def generate_song():
+    data = request.get_json()
+    gpt_description_prompt = data.get('gpt_description_prompt')
+    music_style = data.get('music_style')
+
+    headers = {
+        "Authorization": f"Bearer {API_TOKEN}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "prompt": "",
+        "gpt_description_prompt": gpt_description_prompt,
+        "tags": music_style,
+        "mv": "chirp-v3-5"
+    }
+
+    # Send request to Suno API to generate the song
+    response = requests.post(BASE_URL_GENERATE, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        song_id = response.json()["id"]
+        return jsonify({"song_id": song_id}), 200
+    else:
+        return jsonify({"error": "Error generating song"}), 500
 
 
 @app.route("/predict", methods=["POST", "OPTIONS"])

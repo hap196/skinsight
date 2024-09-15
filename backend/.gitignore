@@ -1,4 +1,0 @@
-/venv
-.env
-label_encoder.pkl
-skin_classifier.h5

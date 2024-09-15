@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Row, Col, message, Carousel, Steps, Upload, Button } from "antd";
+import { Row, Col, message, Carousel, Steps, Upload, Button, Spin } from "antd";
 import { CheckCircleOutlined, LeftOutlined, RightOutlined, UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Quiz.css";
-import button1 from "../assets/buttons/button1.png";
-import button2 from "../assets/buttons/button2.png";
-import button3 from "../assets/buttons/button3.png";
-import button4 from "../assets/buttons/button4.png";
-import button5 from "../assets/buttons/button5.png";
-import button6 from "../assets/buttons/button6.png";
-import button7 from "../assets/buttons/button7.png";
-import button8 from "../assets/buttons/button8.png";
-import button9 from "../assets/buttons/button9.png";
+import dryImg from "../assets/buttons/scar.svg";
+import comboImg from "../assets/buttons/scar.svg";
+import oilyImg from "../assets/buttons/scar.svg";
+import poreImg from "../assets/buttons/scar.svg";
+import bumpyImg from "../assets/buttons/scar.svg";
+import blackheadImg from "../assets/buttons/scar.svg";
+import hyperImg from "../assets/buttons/scar.svg";
+import scarImg from "../assets/buttons/scar.svg";
+import sebumImg from "../assets/buttons/scar.svg";
+import sunImg from "../assets/buttons/scar.svg";
+import wrinkleImg from "../assets/buttons/scar.svg";
 
 const SkinAIForm = () => {
   const [formData, setFormData] = useState({});
@@ -20,7 +22,10 @@ const SkinAIForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [file, setFile] = useState(null); // Store file here
   const [fileList, setFileList] = useState([]); // Store file list
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGeneratingSong, setIsGeneratingSong] = useState(false);
+  const [songReady, setSongReady] = useState(false);
+  const [audioUrl, setAudioUrl] = useState("");
   const navigate = useNavigate();
   const carouselRef = React.useRef();
 
@@ -36,33 +41,16 @@ const SkinAIForm = () => {
       label: "What best describes your skin type?",
       options: ["DRY", "COMBINATION", "OILY"],
       multiple: false,
-      images: [button1, button2, button3],
+      images: [dryImg, comboImg, oilyImg],
     },
     {
-      label: "Do you have sensitive skin?",
-      options: ["YES", "NO", "DON'T KNOW"],
-      multiple: false,
-      images: [button1, button2, button3],
-    },
-    {
-      label: "What skin concerns would you like to target?",
+      label: "What are your skin concerns?",
       options: [
         "LARGE PORES", "WRINKLES", "SUNSPOTS", "BUMPY SKIN", "SEBACEOUS FILAMENTS",
         "HYPERPIGMENTATION", "BLACKHEADS", "ACNE SCARS", "FLAKY SKIN"
       ],
       images: [
-        button1, button2, button3, button4, button5, button6, button7, button8, button9
-      ],
-      multiple: true,
-    },
-    {
-      label: "Which parts of your body do you have the most skin concerns?",
-      options: [
-        "T-ZONE", "CHEEKS", "CHIN", "NECK", "SHOULDERS",
-        "BACK", "CHEST", "ARMS/HANDS", "LEGS/FEET"
-      ],
-      images: [
-        button1, button2, button3, button4, button5, button6, button7, button8, button9
+        poreImg, wrinkleImg, sunImg, bumpyImg, sebumImg, hyperImg, blackheadImg, scarImg, dryImg
       ],
       multiple: true,
     },
@@ -72,19 +60,13 @@ const SkinAIForm = () => {
     {
       label: "Are you a morning bird or a night owl?",
       options: ["MORNING BIRD", "NIGHT OWL", "NEITHER"],
-      images: [button1, button2, button3],
+      images: [dryImg, dryImg, dryImg],
       multiple: false,
     },
     {
       label: "How many hours do you exercise per week?",
       options: ["0-2", "3-6", "7+"],
-      images: [button1, button2, button3],
-      multiple: false,
-    },
-    {
-      label: "How many hours do you sleep each night?",
-      options: ["6 OR LESS", "7-8", "9-10"],
-      images: [button1, button2, button3],
+      images: [dryImg, dryImg, dryImg],
       multiple: false,
     },
   ];
@@ -105,7 +87,6 @@ const SkinAIForm = () => {
 
   // Handle file upload and store in state
   const handleImageUpload = ({ fileList }) => {
-    // Always set the first file uploaded
     if (fileList.length > 0) {
       setFile(fileList[0].originFileObj); // Ensure file is properly set
       setFileList(fileList); // Set the fileList
@@ -116,11 +97,44 @@ const SkinAIForm = () => {
     }
   };
 
-  // Handle form submission
+  // song generation after you finish lifestyle questions
+  const generateSong = async () => {
+    setIsGeneratingSong(true);
+    setSongReady(false);
+
+    try {
+      // send data to suno
+      const response = await axios.post("http://127.0.0.1:5001/generate", {
+        gpt_description_prompt: "A song based on your lifestyle",
+        music_style: formData["Are you a morning bird or a night owl?"],
+      });
+
+      const { song_id } = response.data;
+
+      // Poll until the audio URL is ready
+      const pollInterval = setInterval(async () => {
+        const audioResponse = await axios.get(`http://127.0.0.1:5001/check_audio/${song_id}`);
+        const { audio_url } = audioResponse.data;
+
+        if (audio_url) {
+          clearInterval(pollInterval);
+          setIsGeneratingSong(false);
+          setSongReady(true);
+          setAudioUrl(audio_url); // store audio for results page
+          setCurrentStep(3);
+        }
+      }, 5000); // poll every 5 seconds to see if it generated
+    } catch (error) {
+      console.error("Error generating song:", error);
+      message.error("Error generating the song. Please try again.");
+      setIsGeneratingSong(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
-      message.error("Please upload a file before submitting.");
+      message.error("Please upload a file before you submit.");
       return;
     }
 
@@ -137,8 +151,8 @@ const SkinAIForm = () => {
       const prediction = response.data.predicted_disease_class;
       const gptResponse = response.data.skincare_recommendations;
 
-      // Pass predictions to results page then redirect
-      navigate("/results", { state: { prediction, gptResponse } });
+      // pass predictions and audio url to results page
+      navigate("/results", { state: { prediction, gptResponse, audio_url: audioUrl } });
     } catch (error) {
       console.error("Error uploading file:", error);
       if (error.response) {
@@ -151,7 +165,7 @@ const SkinAIForm = () => {
   };
 
   // Handle next button click
-  const handleNext = () => {
+  const handleNext = async () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (currentStep === 0) {
       setCurrentStep(1);
@@ -165,7 +179,8 @@ const SkinAIForm = () => {
       setCurrentQuestion(currentQuestion + 1);
       carouselRef.current.next();
     } else if (currentStep === 2 && currentQuestion === lifestyleQuestions.length - 1) {
-      setCurrentStep(3); // Move to upload image step
+      // Trigger song generation after completing lifestyle questions
+      await generateSong();
     }
   };
 
@@ -220,7 +235,7 @@ const SkinAIForm = () => {
           </Upload>
           <Button
             type="primary"
-            onClick={handleSubmit}
+            onClick={handleSubmit} // Existing submit handler
             disabled={!file || isLoading} // Enable submit button only if a file is uploaded
           >
             {isLoading ? "Processing..." : "Submit"}
@@ -259,6 +274,15 @@ const SkinAIForm = () => {
   return (
     <div className="form-wrapper">
       <h2 className="page-title">insight into you</h2>
+
+      {isGeneratingSong && (
+        <div className="loading-indicator">
+          <Spin tip="Generating a song just for you..." />
+        </div>
+      )}
+
+      {songReady && <p>Your song is ready! Proceeding to image upload...</p>}
+
       <div className="steps-container">
         <Steps current={currentStep}>
           {stepsData.map((step, index) => (
