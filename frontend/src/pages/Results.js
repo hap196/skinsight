@@ -19,7 +19,7 @@ const Results = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   axios.defaults.withCredentials = true;
-  
+
   // Parse GPT response if it's a string
   useEffect(() => {
     if (typeof gptResponseRaw === "string") {
@@ -64,8 +64,9 @@ const Results = () => {
   };
 
   const ingredients = gptResponse?.ingredients || {};
-  const morning = gptResponse?.morning || "";
-  const night = gptResponse?.night || "";
+  // filter out empty steps
+  const morning = gptResponse?.morning?.split(".").filter((step) => step.trim() !== "") || [];
+  const night = gptResponse?.night?.split(".").filter((step) => step.trim() !== "") || [];
 
   useEffect(() => {
     const smoothScroll = (target, duration) => {
@@ -186,10 +187,20 @@ const Results = () => {
 
       <section className="section routines">
         <div className="daytime-container">
-          <Daytime products={morning.split(".")} />
+          <h3>Morning Routine</h3>
+          <ol>
+            {morning.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ol>
         </div>
         <div className="nighttime-container">
-          <Nighttime products={night.split(".")} />
+          <h3>Night Routine</h3>
+          <ol>
+            {night.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ol>
         </div>
       </section>
 
