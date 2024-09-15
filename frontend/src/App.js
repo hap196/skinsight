@@ -5,7 +5,7 @@ import Predict from "./pages/Predict";
 import Quiz from "./components/Quiz";
 import Profile from "./pages/Profile";
 import Results from "./pages/Results";
-import Music from "./components/Music";
+import Music from "./pages/components/Music";
 
 function App() {
   return (

@@ -6,54 +6,61 @@ const Music = () => {
   const [mv, setMv] = useState("");
   const [trackId, setTrackId] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
-  const base_url = process.env.REACT_APP_BASE_URL;
+
+  const base_url = "http://localhost:5000"; // Your local Flask server URL
   const authToken = process.env.REACT_APP_AUTH_TOKEN;
 
   async function generateMusic() {
+    console.log("Generating music...");
     try {
-      console.log("base_url", base_url);
       const response = await fetch(`${base_url}/api/generate`, {
-        mode: "no-cors",
-
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({ prompt, tags, mv }),
+        credentials: 'include',
       });
 
+      console.log("Response status:", response.status);
       if (response.ok) {
         const data = await response.json();
+        console.log("Received data:", data);
         setTrackId(data.trackId);
         playAudio(data.trackId);
       } else {
         console.error("Error:", response.statusText);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Fetch error:", error);
     }
   }
 
   async function playAudio(trackId) {
+    console.log("Playing audio for trackId:", trackId);
     try {
-      const response = await fetch(`${base_url}/api/generate/${trackId}`, {
-        mode: "no-cors",
+      const response = await fetch(
+        `${base_url}/api/feed/v2/?track_id=${trackId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          credentials: 'include',
+        }
+      );
 
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-
+      console.log("Audio response status:", response.status);
       if (response.ok) {
         const data = await response.json();
+        console.log("Received audio data:", data);
         const url = data.audioUrl; // Adjust based on actual response
         setAudioUrl(url);
       } else {
         console.error("Error:", response.statusText);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Fetch error:", error);
     }
   }
 
