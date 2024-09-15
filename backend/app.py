@@ -145,12 +145,10 @@ def logout():
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
-    # when user finishes form again
-    if request.method == "POST":
-        session["user"]["quiz_attributes"] = {key: request.form.get(key) for key in request.form if key != 'file'}
-
     user = session.get("user")
     if user:
+        quiz_data = db.user_collection.find_one({"email": user["email"]}, {"quiz_data": 1})
+        user["quiz_data"] = quiz_data.get("quiz_data", {}) if quiz_data else {}
         response = jsonify(user)
     else:
         response = jsonify({"error": "User not logged in"}), 401
@@ -160,6 +158,7 @@ def profile():
     response.headers.add("Access-Control-Allow-Credentials", "true")
     
     return response
+
 
 
 # load model and encoder

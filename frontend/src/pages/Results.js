@@ -3,12 +3,7 @@ import "./Results.css";
 import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
 import { useLocation } from "react-router-dom";
-import star1 from "../assets/star.svg";
-import star2 from "../assets/star2.svg";
-import star3 from "../assets/star3.svg";
-import star4 from "../assets/star4.svg";
-import star5 from "../assets/star5.svg";
-import star6 from "../assets/star6.svg";
+import starImg1 from "../assets/star.svg";
 import Profile from "./Profile";
 
 const Results = () => {
@@ -114,27 +109,27 @@ const Results = () => {
   }, []);
 
   const starImages = [
-    { src: star5, left: "5%", top: "20%" },
-    { src: star3, left: "20%", top: "70%" },
-    { src: star1, left: "50%", top: "5%" },
-    { src: star6, left: "70%", top: "55%" },
-    { src: star2, left: "90%", top: "20%" },
-    { src: star1, left: "110%", top: "70%" },
-    { src: star3, left: "120%", top: "0%" },
-    { src: star6, left: "140%", top: "20%" },
-    { src: star2, left: "185%", top: "50%" },
-    { src: star4, left: "170%", top: "10%" },
-    { src: star5, left: "160%", top: "80%" },
+    { src: starImg1, left: "5%", top: "20%" },
+    { src: starImg1, left: "20%", top: "70%" },
+    { src: starImg1, left: "50%", top: "5%" },
+    { src: starImg1, left: "70%", top: "55%" },
+    { src: starImg1, left: "90%", top: "20%" },
+    { src: starImg1, left: "110%", top: "70%" },
+    { src: starImg1, left: "120%", top: "0%" },
+    { src: starImg1, left: "140%", top: "20%" },
+    { src: starImg1, left: "185%", top: "50%" },
+    { src: starImg1, left: "170%", top: "10%" },
+    { src: starImg1, left: "160%", top: "80%" },
   ];
 
   return (
     <div className={`container ${isProfileOpen ? "profile-open" : ""}`}>
-      <Profile
+      {/* <Profile
         identifiedSkinCondition={prediction}
         skinConcerns={gptResponse?.skin_concerns}
         isCollapsed={!isProfileOpen}
         toggleCollapse={toggleProfile}
-      />
+      /> */}
 
       <div className="floating-images">
         {starImages.map((image, index) => (
@@ -147,9 +142,9 @@ const Results = () => {
           />
         ))}
       </div>
-      <button onClick={toggleProfile} className="open-profile-button">
+      {/* <button onClick={toggleProfile} className="open-profile-button">
         {isProfileOpen ? "Close Profile" : "Open Profile"}
-      </button>
+      </button> */}
 
       <section className="section product-recommendations">
         <h2>Product Recommendations</h2>
@@ -185,10 +180,10 @@ const Results = () => {
 
       <section className="section routines">
         <div className="daytime-container">
-          <Daytime products={morning} />
+          <Daytime products={morning.split(".")} />
         </div>
         <div className="nighttime-container">
-          <Nighttime products={night} />
+          <Nighttime products={night.split(".")} />
         </div>
       </section>
     </div>
