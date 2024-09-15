@@ -1,9 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Row, Col, message, Carousel, Steps, Upload, Button } from "antd";
-import { CheckCircleOutlined, FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Quiz.css";
+import dryImg from "../assets/buttons/dry.svg";
+import comboImg from "../assets/buttons/combo.svg";
+import oilyImg from "../assets/buttons/oily.svg";
+import poreImg from "../assets/buttons/pores.svg";
+import bumpyImg from "../assets/buttons/bumpy.svg";
+import blackheadImg from "../assets/buttons/blackhead.svg";
+import hyperImg from "../assets/buttons/hyper.svg";
+import scarImg from "../assets/buttons/scar.svg";
+import sebumImg from "../assets/buttons/sebum.svg";
+import sunImg from "../assets/buttons/sun.svg";
+import wrinkleImg from "../assets/buttons/wrinkle.svg";
 
 const handleLogin = () => {
   window.location.href = "http://localhost:5001/login";
@@ -21,16 +32,21 @@ const SkinAIForm = () => {
 
   const stepsData = [
     { title: "Login" },
-    { title: "Questions" },
+    { title: "Medical" },
+    { title: "Lifestyle" },
     { title: "Upload Image" },
   ];
 
   const questions = [
     {
       label: "What best describes your skin type?",
-      options: ["Oily", "Combination", "Dry"],
+      options: ["Dry", "Combination", "Oily"],
       multiple: false,
-      icons: [<FrownOutlined />, <MehOutlined />, <SmileOutlined />],
+      images: [
+        dryImg,
+        comboImg,
+        oilyImg,
+      ],
     },
     {
       label: "What are your skin concerns?",
@@ -45,25 +61,85 @@ const SkinAIForm = () => {
         "Acne scars",
         "Flaky skin",
       ],
+      images: [
+        poreImg,
+        wrinkleImg,
+        sunImg,
+        bumpyImg,
+        sebumImg,
+        hyperImg,
+        blackheadImg,
+        scarImg,
+        dryImg,
+      ],
       multiple: true,
     },
     {
       label: "Do you have sensitive skin?",
       options: ["Yes", "No", "I don’t know"],
-      icons: [<CheckCircleOutlined />, <FrownOutlined />, <MehOutlined />],
+      images: [
+        dryImg,
+        dryImg,
+        dryImg,
+      ],
+      multiple: false,
     },
     {
       label: "Where is your main concern?",
       options: [
         "Cheeks",
-        "Forehead",
+        "T-zone",
+        "Chin",
         "Arms/Hands",
-        "Leg/Feet",
+        "Legs/Feet",
+        "Neck",
+        "Shoulders",
         "Back",
         "Chest",
-        "Neck",
-        "Multiple locations",
       ],
+      images: [
+        dryImg,
+        dryImg,
+        dryImg,
+        dryImg,
+        dryImg,
+        dryImg,
+        dryImg,
+        dryImg,
+        dryImg,
+      ],
+      multiple: true,
+    },
+    {
+      label: "Are you a morning bird or a night owl?",
+      options: ["Morning bird", "Night owl", "Neither"],
+      images: [
+        dryImg,
+        dryImg,
+        dryImg,
+      ],
+      multiple: false,
+    },
+    {
+      label: "How many hours do you exercise per week?",
+      options: ["0-2", "3-6", "7+"],
+      images: [
+        dryImg,
+        dryImg,
+        dryImg,
+      ],
+      multiple: false,
+    },
+    {
+      label: "How many hours of sleep do you typically get each night?",
+      options: ["6 or less", "7-8", "9-10"],
+      images: [
+        dryImg,
+        dryImg,
+        dryImg,
+        dryImg,
+      ],
+      multiple: false,
     },
   ];
 
@@ -169,15 +245,20 @@ const SkinAIForm = () => {
                   <h3 className="question-title">{question.label}</h3>
                   <Row gutter={[16, 16]} className="options">
                     {question.options.map((option, idx) => (
-                      <Col flex="1 0 20%" key={idx}>
+                      <Col span={8} key={idx}>
                         <div
                           className={`option-circle ${
                             formData[question.label]?.includes(option) ? "selected" : ""
                           }`}
                           onClick={() => handleSelect(option)}
                         >
-                          <p>{option}</p>
+                          {question.images && question.images[idx] ? (
+                            <img src={question.images[idx]} alt={option} />
+                          ) : (
+                            <span>{option}</span>
+                          )}
                         </div>
+                        <p>{option}</p> {/* Text label below the image */}
                       </Col>
                     ))}
                   </Row>
@@ -197,7 +278,7 @@ const SkinAIForm = () => {
       case 2:
         return (
           <div className="form-content">
-            <h3>Upload a clear image of your skin</h3>
+            <h3>Upload a high resolution image of your skin</h3>
             <Upload
               listType="picture"
               fileList={fileList}
@@ -223,7 +304,7 @@ const SkinAIForm = () => {
       default:
         return null;
     }
-  };
+  };  
 
   return (
     <div className="form-wrapper">
