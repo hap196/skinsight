@@ -43,8 +43,8 @@ body {
 }
 
 .option-circle {
-  height: 350px;
-  width: 350px;
+  height: 300px;
+  width: 300px;
   border-radius: 50%;
   transition: all 0.3s ease;
   cursor: pointer;
