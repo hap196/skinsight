@@ -87,7 +87,7 @@ const Results = () => {
 
   const fetchAssistant = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/get_assistant", {
+      const response = await axios.post("http://localhost:5002/get_assistant", {
         context: `Here is the user's information. Skin condition: acne and rosacea. Skincare recommended: salycilic acid`,
         threadId: "",
         withCredentials: true,
@@ -248,7 +248,10 @@ const Results = () => {
 
       <section className="section product-recommendations">
         <h3 className="greeting">hi, {userName.toLowerCase()}!</h3>
-        <h3>here are your skincare recommendations:</h3>
+        <h4>your skin is showing signs of: {prediction.toLowerCase()}</h4>
+        <br />
+        <br />
+        <h3>here are your dermatology recommendations:</h3>
         <ul className="ingredients-list">
           {Object.entries(ingredients).map(([ingredient, description], index) => (
             <li className="ingredient-item" key={index}>
@@ -280,7 +283,7 @@ const Results = () => {
         </div>
       </section>
 
-      {/* Audio Player positioned at the bottom right */}
+      {/* Audio Player positioned at the bottom right
       {audio_url && (
         <div className="audio-player-container">
           <audio id="background-audio" controls autoPlay loop>
@@ -288,11 +291,11 @@ const Results = () => {
             Your browser does not support the audio element.
           </audio>
         </div>
-      )}
+      )} */}
 
       <div className="chat-launcher">
         <Button className="brown-button" onClick={handleChatToggle}>
-          Talk to our dermatology assistant
+          Talk to your dermatology assistant
         </Button>
       </div>
 

@@ -45,14 +45,24 @@ html {
   min-width: 100vw;
 }
 
-.section h2,
+.name {
+  font-family: 'OtherFont", sans-serif';
+  font-size: 2.5rem;
+  font-weight: semi-bold;
+}
 .section h3 {
   font-family: "CustomFont", sans-serif;
   font-weight: lighter;
   color: black;
-  font-size: 2.5rem;
+  font-size: 2rem;
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-  letter-spacing: 3px;
+  text-align: center;
+  margin: 1rem 0;
+  margin-bottom: 0;
+}
+
+.section h4 {
+  font-size: x-large;
 }
 
 .section p {
@@ -64,14 +74,13 @@ html {
 }
 
 .container .greeting {
-  position: absolute;
-  top: 5%;
-  left: 40%;
   font-family: "CustomFont", sans-serif;
   font-weight: lighter;
   color: black;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .ingredients-list {
@@ -268,14 +277,15 @@ html {
   cursor: pointer;
   font-family: "OtherFont", sans-serif;
   margin-bottom: 10%;
+  font-weight: bold;
 }
 
 .vinyl-player {
-  position: absolute; /* Ensure positioning context for child elements */
+  position: fixed; /* Ensure positioning context for child elements */
   width: 200px;
   height: 200px; /* Set a height to contain child elements */
   bottom: 5%;
-  right: 0%;
+  right: 5%;
 }
 
 .vinyl-base {
