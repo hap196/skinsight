@@ -3,12 +3,7 @@ import "./Results.css";
 import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
 import { useLocation } from "react-router-dom";
-<<<<<<< HEAD
 import starImg1 from "../assets/star.svg"
-=======
-import { Drawer } from "antd";
-import Profile from "./Profile";
->>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
 
 const Results = () => {
   const location = useLocation();
@@ -37,15 +32,8 @@ const Results = () => {
   };
 
   useEffect(() => {
-<<<<<<< HEAD
     const smoothScroll = (target, duration) => {
       let start = window.pageXOffset;
-=======
-    // Smooth scrolling function
-
-    function smoothScroll(target, duration) {
-      let start = window.pageXOffset; // Start position is the current horizontal scroll
->>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
       let distance = target - start;
       let startTime = null;
 
@@ -154,17 +142,12 @@ const Results = () => {
       </section>
 
       <section className="section routines">
-<<<<<<< HEAD
         <div className="daytime-container">
           <Daytime products={morning.split('.')} />
         </div>
         <div className="nighttime-container">
           <Nighttime products={night.split('.')} />
         </div>
-=======
-        <Daytime products={morning.split(".")} />
-        <Nighttime products={night.split(".")} />
->>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
       </section>
     </div>
   );
