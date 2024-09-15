@@ -26,33 +26,12 @@ def remove_source(text):
     text = re.sub(r'\*+', '', text)
     return text.strip()
 
-@app.route('/get_assistant', methods=['POST'])
+@app.route('/get_assistant', methods=['GET'])
 def get_assistant():
     global assistant_id
-    data = json.loads(request.data)
-    context = data.get('context', '')  # Default to an empty string if context is not provided
-    thread_id = data.get('threadId')
     try:
         assistant_id = 'asst_A3YGhsDgqZdYk85UyXsRiX6s'
-        if not thread_id:
-            thread = client.beta.threads.create()
-            thread_id = thread.id
-
-        client.beta.threads.messages.create(
-            thread_id=thread_id,
-            role="user",
-            content=context,
-        )
-
-        run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id=assistant_id)
-
-        while True:
-            response = client.beta.threads.runs.retrieve(run_id=run.id, thread_id=thread_id)
-            if response.status not in ["in_progress", "queued"]:
-                break
-            time.sleep(2)
-
-        return jsonify({'assistant_id': assistant_id, 'threadId': thread_id})
+        return jsonify({'assistant_id': assistant_id})
     except Exception as e:
         logger.error('Error fetching assistant: %s', str(e))
         return make_response(f"An error occurred while fetching assistant: {str(e)}", 500)

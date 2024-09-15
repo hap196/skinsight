@@ -1,16 +1,16 @@
 
 .ant-layout-sider {
-  background-color: #F3E4C7 !important;
+  background-color: #f0f0f0 !important;
 }
 
 
 .app-container {
   height: 100vh;
-  background-color: #F3E4C7;
+  background-color: #f0f0f0;
 }
 
 .profile-sidebar {
-  background-color: #F3E4C7;
+  background-color: #f0f0f0;
   height: 100vh;
   padding: 20px;
   overflow: hidden;
@@ -74,4 +74,13 @@
 .profile-label {
   color: black;
   margin-right: 10px;
+}
+
+.chatbox-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  z-index: 1000;
 }
