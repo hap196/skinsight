@@ -81,12 +81,14 @@ const Profile = ({
 
   const fetchAssistant = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/get_assistant", {withCredentials: true});
+      const response = await axios.get("http://localhost:5000/get_assistant", {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching assistant:", error);
     }
-  };
+  };  
 
   const initChatBot = async () => {
     const data = await fetchAssistant();

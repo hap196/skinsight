@@ -78,8 +78,8 @@ const Chat = ({
   };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  }, [messages]);  
 
   return (
     <Layout
@@ -129,7 +129,7 @@ const Chat = ({
       <Footer style={{ padding: "16px", position: "relative" }}>
         {isWaiting && (
           <Spin
-            style={{ position: "absolute", bottom: "100px", left: "10px" }}
+            style={{ position: "absolute", bottom: "100px", left: "30px" }}
             size="small"
           />
         )}
