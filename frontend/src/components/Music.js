@@ -12,7 +12,7 @@ const Music = () => {
   async function generateMusic() {
     try {
       console.log("base_url", base_url);
-      const response = await fetch(`${base_url}/api/generate/v2`, {
+      const response = await fetch(`${base_url}/api/generate`, {
         mode: "no-cors",
 
         method: "POST",
@@ -20,12 +20,12 @@ const Music = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
-        body: JSON.stringify({ auth, prompt, tags, mv }),
+        body: JSON.stringify({ prompt, tags, mv }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        setTrackId(data.trackId); 
+        setTrackId(data.trackId);
         playAudio(data.trackId);
       } else {
         console.error("Error:", response.statusText);
