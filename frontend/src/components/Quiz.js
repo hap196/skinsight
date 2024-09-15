@@ -4,17 +4,15 @@ import { Row, Col, message, Carousel, Steps, Upload, Button } from "antd";
 import { CheckCircleOutlined, LeftOutlined, RightOutlined, UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Quiz.css";
-import dryImg from "../assets/buttons/dry.svg";
-import comboImg from "../assets/buttons/combo.svg";
-import oilyImg from "../assets/buttons/oily.svg";
-import poreImg from "../assets/buttons/pores.svg";
-import bumpyImg from "../assets/buttons/bumpy.svg";
-import blackheadImg from "../assets/buttons/blackhead.svg";
-import hyperImg from "../assets/buttons/hyper.svg";
-import scarImg from "../assets/buttons/scar.svg";
-import sebumImg from "../assets/buttons/sebum.svg";
-import sunImg from "../assets/buttons/sun.svg";
-import wrinkleImg from "../assets/buttons/wrinkle.svg";
+import button1 from "../assets/buttons/button1.svg";
+import button2 from "../assets/buttons/button2.svg";
+import button3 from "../assets/buttons/button3.svg";
+import button4 from "../assets/buttons/button4.svg";
+import button5 from "../assets/buttons/button5.svg";
+import button6 from "../assets/buttons/button6.svg";
+import button7 from "../assets/buttons/button7.svg";
+import button8 from "../assets/buttons/button8.svg";
+import button9 from "../assets/buttons/button9.svg";
 
 const SkinAIForm = () => {
   const [formData, setFormData] = useState({});
@@ -38,16 +36,33 @@ const SkinAIForm = () => {
       label: "What best describes your skin type?",
       options: ["DRY", "COMBINATION", "OILY"],
       multiple: false,
-      images: [dryImg, comboImg, oilyImg],
+      images: [button1, button2, button3],
     },
     {
-      label: "What are your skin concerns?",
+      label: "Do you have sensitive skin?",
+      options: ["YES", "NO", "DON'T KNOW"],
+      multiple: false,
+      images: [button1, button2, button3],
+    },
+    {
+      label: "What skin concerns would you like to target?",
       options: [
         "LARGE PORES", "WRINKLES", "SUNSPOTS", "BUMPY SKIN", "SEBACEOUS FILAMENTS",
         "HYPERPIGMENTATION", "BLACKHEADS", "ACNE SCARS", "FLAKY SKIN"
       ],
       images: [
-        poreImg, wrinkleImg, sunImg, bumpyImg, sebumImg, hyperImg, blackheadImg, scarImg, dryImg
+        button1, button2, button3, button4, button5, button6, button7, button8, button9
+      ],
+      multiple: true,
+    },
+    {
+      label: "Which parts of your body do you have the most skin concerns?",
+      options: [
+        "T-ZONE", "CHEEKS", "CHIN", "NECK", "SHOULDERS",
+        "BACK", "CHEST", "ARMS/HANDS", "LEGS/FEET"
+      ],
+      images: [
+        button1, button2, button3, button4, button5, button6, button7, button8, button9
       ],
       multiple: true,
     },
@@ -57,13 +72,19 @@ const SkinAIForm = () => {
     {
       label: "Are you a morning bird or a night owl?",
       options: ["MORNING BIRD", "NIGHT OWL", "NEITHER"],
-      images: [dryImg, dryImg, dryImg],
+      images: [button1, button2, button3],
       multiple: false,
     },
     {
       label: "How many hours do you exercise per week?",
       options: ["0-2", "3-6", "7+"],
-      images: [dryImg, dryImg, dryImg],
+      images: [button1, button2, button3],
+      multiple: false,
+    },
+    {
+      label: "How many hours do you sleep each night?",
+      options: ["6 OR LESS", "7-8", "9-10"],
+      images: [button1, button2, button3],
       multiple: false,
     },
   ];
