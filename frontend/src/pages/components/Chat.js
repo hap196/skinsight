@@ -95,7 +95,7 @@ const Chat = ({
     >
       <Header
         style={{
-          backgroundColor: "#68563f",
+          backgroundColor: "#a0876e",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -147,7 +147,7 @@ const Chat = ({
             type="primary"
             icon={<SendOutlined />}
             onClick={handleSendMessage}
-            style={{ backgroundColor: "#68563f", borderColor: "#68563f" }}
+            style={{ backgroundColor: "#a0876e", borderColor: "#a0876e" }}
           />
         </Space>
       </Footer>
