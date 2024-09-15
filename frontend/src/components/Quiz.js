@@ -40,6 +40,7 @@ const SkinAIForm = () => {
         "Blackheads",
         "Acne scars",
         "Flaky skin",
+        "Excess oil",
       ],
       multiple: true,
     },
