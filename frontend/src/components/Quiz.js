@@ -127,6 +127,9 @@ const SkinAIForm = () => {
       const prediction = response.data.predicted_disease_class;
       const gptResponse = response.data.skincare_recommendations;
 
+      // Post form responses to the profile endpoint
+      const response2 = await axios.post("http://127.0.0.1:5001/profile", formDataToSend);
+
       // Pass predictions to results page then redirect
       navigate("/results", { state: { prediction, gptResponse } });
     } catch (error) {

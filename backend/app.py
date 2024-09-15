@@ -86,9 +86,12 @@ def logout():
     session.pop("user", None)
     return redirect("/")
 
-
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
+    # when user finishes form again
+    if request.method == "POST":
+        session["user"]["quiz_attributes"] = {key: request.form.get(key) for key in request.form if key != 'file'}
+
     user = session.get("user")
     if user:
         response = jsonify(user)
@@ -98,6 +101,7 @@ def profile():
     # Add necessary CORS headers to allow credentials
     response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
     response.headers.add("Access-Control-Allow-Credentials", "true")
+    
     return response
 
 
