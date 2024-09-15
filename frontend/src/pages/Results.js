@@ -3,21 +3,20 @@ import "./Results.css";
 import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
 import { useLocation } from "react-router-dom";
-import star1 from "../assets/star.svg";
-import star2 from "../assets/star2.svg";
-import star3 from "../assets/star3.svg";
-import star4 from "../assets/star4.svg";
-import star5 from "../assets/star5.svg";
-import star6 from "../assets/star6.svg";
-import Profile from "./Profile";
+import starImg1 from "../assets/star.svg";
+import axios from "axios";
+import Chat from "./components/Chat";
+import { Button } from "antd";
 
 const Results = () => {
   const location = useLocation();
-  const { prediction, gptResponse: gptResponseRaw, audio_url } = location.state || {}; 
+  const { prediction, gptResponse: gptResponseRaw, audio_url } = location.state || {};
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio, setAudio] = useState(null);
   const [gptResponse, setGptResponse] = useState({});
+  const [userName, setUserName] = useState("Guest");
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Parse GPT response if it's a string
   useEffect(() => {
@@ -33,11 +32,10 @@ const Results = () => {
     }
   }, [gptResponseRaw]);
 
-  // initialize the audio object when audio_url is available
+  // Initialize the audio object when audio_url is available
   useEffect(() => {
     if (audio_url) {
       const audioInstance = new Audio(audio_url);
-      // store audio instance for playback control
       setAudio(audioInstance);
 
       return () => {
@@ -47,15 +45,25 @@ const Results = () => {
     }
   }, [audio_url]);
 
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await axios.get("http://localhost:5001/profile");
+        setUserName(response.data.name || "Guest");
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    fetchUserName();
+  }, []);
+
+  const handleChatToggle = () => {
+    setIsChatOpen(!isChatOpen);
+  };
 
   const ingredients = gptResponse?.ingredients || {};
   const morning = gptResponse?.morning || "";
   const night = gptResponse?.night || "";
-  const [isProfileOpen, setIsProfileOpen] = useState(true);
-
-  const toggleProfile = () => {
-    setIsProfileOpen(!isProfileOpen);
-  };
 
   useEffect(() => {
     const smoothScroll = (target, duration) => {
@@ -114,27 +122,22 @@ const Results = () => {
   }, []);
 
   const starImages = [
-    { src: star5, left: "5%", top: "20%" },
-    { src: star3, left: "20%", top: "70%" },
-    { src: star1, left: "50%", top: "5%" },
-    { src: star6, left: "70%", top: "55%" },
-    { src: star2, left: "90%", top: "20%" },
-    { src: star1, left: "110%", top: "70%" },
-    { src: star3, left: "120%", top: "0%" },
-    { src: star6, left: "140%", top: "20%" },
-    { src: star2, left: "185%", top: "50%" },
-    { src: star4, left: "170%", top: "10%" },
-    { src: star5, left: "160%", top: "80%" },
+    { src: starImg1, left: "5%", top: "20%" },
+    { src: starImg1, left: "20%", top: "70%" },
+    { src: starImg1, left: "50%", top: "5%" },
+    { src: starImg1, left: "70%", top: "55%" },
+    { src: starImg1, left: "90%", top: "20%" },
+    { src: starImg1, left: "110%", top: "70%" },
+    { src: starImg1, left: "120%", top: "0%" },
+    { src: starImg1, left: "140%", top: "20%" },
+    { src: starImg1, left: "185%", top: "50%" },
+    { src: starImg1, left: "170%", top: "10%" },
+    { src: starImg1, left: "160%", top: "80%" },
   ];
 
   return (
-    <div className={`container ${isProfileOpen ? "profile-open" : ""}`}>
-      <Profile
-        identifiedSkinCondition={prediction}
-        skinConcerns={gptResponse?.skin_concerns}
-        isCollapsed={!isProfileOpen}
-        toggleCollapse={toggleProfile}
-      />
+    <div className="container">
+      <h2 className="greeting">Hi, {userName}!</h2>
 
       <div className="floating-images">
         {starImages.map((image, index) => (
@@ -147,9 +150,6 @@ const Results = () => {
           />
         ))}
       </div>
-      <button onClick={toggleProfile} className="open-profile-button">
-        {isProfileOpen ? "Close Profile" : "Open Profile"}
-      </button>
 
       <section className="section product-recommendations">
         <h2>Product Recommendations</h2>
@@ -170,27 +170,46 @@ const Results = () => {
           <p>No product recommendations available.</p>
         )}
         {/* Audio Player */}
-      {audio_url ? (
-        <div className="song-controls">
-          <h3>Your Generated Song</h3>
-          <audio id="background-audio" controls autoPlay loop>
-            <source src={audio_url} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      ) : (
-        <p>Sorry, no audio is available yet.</p>
-      )}
+        {audio_url ? (
+          <div className="song-controls">
+            <h3>Your Generated Song</h3>
+            <audio id="background-audio" controls autoPlay loop>
+              <source src={audio_url} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        ) : (
+          <p>Sorry, no audio is available yet.</p>
+        )}
       </section>
 
       <section className="section routines">
         <div className="daytime-container">
-          <Daytime products={morning} />
+          <Daytime products={morning.split(".")} />
         </div>
         <div className="nighttime-container">
-          <Nighttime products={night} />
+          <Nighttime products={night.split(".")} />
         </div>
       </section>
+
+      <div className="chat-launcher">
+        <Button className="brown-button" onClick={handleChatToggle}>
+          Talk to our dermatology assistant
+        </Button>
+      </div>
+
+      <div className="chatbox-container">
+        {isChatOpen && (
+          <Chat
+            handleClose={handleChatToggle}
+            assistantId={null}
+            messages={[]}
+            setMessages={() => {}}
+            threadId={null}
+            setThreadId={() => {}}
+          />
+        )}
+      </div>
     </div>
   );
 };
