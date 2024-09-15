@@ -8,7 +8,7 @@ import { UpOutlined, LeftOutlined, EditOutlined } from "@ant-design/icons";
 const { Title, Text } = Typography;
 const { Sider, Content } = Layout;
 
-const Profile = ({ prediction }) => {
+const Profile = ({ identifiedSkinCondition, skinConcerns }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [assistantId, setAssistantId] = useState(null);
@@ -113,12 +113,13 @@ const Profile = ({ prediction }) => {
     sessionStorage.setItem("threadId", JSON.stringify(threadId));
   }, [threadId]);
 
+
   return (
     <Layout className="app-container">
       {isCollapsed && (
         <Button
           type="text"
-          onClick={toggleCollapse}
+          onClick={() => setIsCollapsed(!isCollapsed)}
           className="collapsed-button"
         >
           <UpOutlined style={{ marginRight: "5px" }} />
@@ -142,7 +143,7 @@ const Profile = ({ prediction }) => {
             type="text"
             icon={isCollapsed ? <UpOutlined /> : <LeftOutlined />}
             shape="circle"
-            onClick={toggleCollapse}
+            onClick={() => setIsCollapsed(!isCollapsed)}
             className="edit-button"
           />
         </div>
@@ -155,44 +156,23 @@ const Profile = ({ prediction }) => {
           </div>
           <div style={{ marginBottom: "10px" }}>
             <Text style={{ color: "black", marginRight: "10px" }}>
-              TODO: skin conditions
+              {identifiedSkinCondition || "No skin condition identified."}
             </Text>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Text style={{ color: "black", marginRight: "10px" }}>
-              <strong>Skin Type:</strong>
-            </Text>
-            <Button
-              type="text"
-              icon={<EditOutlined />}
-              className="edit-button"
-            />
-          </div>
-          <div style={{ marginBottom: "10px" }}>
-            <Text style={{ color: "black", marginRight: "10px" }}>
-              {userAttributes["What is your skin type?"] ||
-                "No skin type inputted."}
-            </Text>
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Text style={{ color: "black", marginRight: "10px" }}>
+          <div className="profile-section">
+            <Text className="profile-label">
               <strong>Skin Concerns:</strong>
             </Text>
-            <Button
-              type="text"
-              icon={<EditOutlined />}
-              className="edit-button"
-            />
+            <Button type="text" className="edit-button" />
           </div>
           <div style={{ marginBottom: "10px" }}>
             <Text style={{ color: "black", marginRight: "10px" }}>
-              {userAttributes["What are your skin concerns?"] ||
-                "No skin concerns inputted."}
+              {skinConcerns || "No skin concerns inputted."}
             </Text>
           </div>
         </Space>
         <div className="chat-launcher">
-          <Button className="brown-button" onClick={handleChatToggle}>
+          <Button className="brown-button" onClick={() => setIsChatOpen(!isChatOpen)}>
             Talk to our dermatology assistant
           </Button>
         </div>
@@ -201,7 +181,7 @@ const Profile = ({ prediction }) => {
         <Content style={{ padding: "20px" }}>
           {isChatOpen && (
             <Chat
-              handleClose={handleChatToggle}
+              handleClose={() => setIsChatOpen(false)}
               assistantId={assistantId}
               messages={messages}
               setMessages={setMessages}
