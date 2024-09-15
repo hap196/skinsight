@@ -2,7 +2,33 @@ import React, { useEffect } from "react";
 import "./Results.css";
 import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
+import { useLocation } from "react-router-dom";
+
 const Results = () => {
+  // Get the passed prediction and recommendations from location state
+  const location = useLocation();
+  let { prediction, gptResponse } = location.state || {}; // Fallback to empty if no state is passed
+
+  if (typeof gptResponse === "string") {
+    try {
+      gptResponse = JSON.parse(gptResponse); // Parse the string as JSON
+    } catch (error) {
+      console.error("Failed to parse GPT response:", error);
+      gptResponse = {}; // Fallback to an empty object if parsing fails
+    }
+  }
+
+  // Parse the GPT response JSON for product recommendations and routines
+  const ingredients = gptResponse?.ingredients || [];
+  const ingredientDescriptions = gptResponse?.ingredient_descriptions || {};
+  const morning = gptResponse?.morning || "";
+  const night = gptResponse?.night || "";
+
+  const ingredientList = ingredients.map((ingredient) => ({
+    ingredient,
+    description: ingredientDescriptions[ingredient] || "No description available",
+  }));
+
   useEffect(() => {
     // Smooth scrolling function
     function smoothScroll(target, duration) {
@@ -111,13 +137,30 @@ const Results = () => {
   return (
     <div className="container">
       <section className="section product-recommendations">
+        <h2>Identified Skin Concerns</h2>
+        <p>{prediction || "No skin concerns identified."}</p>
+      </section>
+      
+      {/* Product Recommendations Section */}
+      <section className="section product-recommendations">
         <h2>Product Recommendations</h2>
-        <p>AI-generated product recommendations will appear here...</p>
+        {ingredients.length > 0 ? (
+          <ul>
+            {ingredients.map((ingredient, index) => (
+              <li key={index}>
+                <strong>{ingredient}:</strong> {ingredientDescriptions[ingredient]}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No product recommendations available.</p>
+        )}
       </section>
 
+      {/* Routines Section */}
       <section className="section routines">
-        <Daytime /> {/* Use the Daytime component */}
-        <Nighttime /> {/* Use the Nighttime component */}
+        <Daytime products={morning.split('.')} />
+        <Nighttime products={night.split('.')} />
       </section>
 
       <button className="scroll-arrow">&#8594;</button>

@@ -1,8 +1,7 @@
-// Daytime.js
 import React from "react";
 import "./Daytime.css";
 
-const Daytime = () => {
+const Daytime = ({ products }) => {
   return (
     <div className="routine-container daytime">
       <div className="routine-image-daytime">
@@ -11,10 +10,13 @@ const Daytime = () => {
       <div className="routine-text-daytime">
         <h2>Daytime Routine</h2>
         <ul>
-          <li>Facial wash</li>
-          <li>Toner</li>
-          <li>Moisturizer</li>
-          <li>SPF</li>
+          {products.length > 0 ? (
+            products.map((product, index) => (
+              <li key={index}>{product.trim()}</li>
+            ))
+          ) : (
+            <p>No daytime routine provided.</p>
+          )}
         </ul>
       </div>
     </div>

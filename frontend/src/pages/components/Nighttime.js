@@ -1,8 +1,7 @@
-// Nighttime.js
 import React from "react";
 import "./Nighttime.css";
 
-const Nighttime = () => {
+const Nighttime = ({ products }) => {
   return (
     <div className="routine-container nighttime">
       <div className="routine-image-nighttime">
@@ -11,10 +10,13 @@ const Nighttime = () => {
       <div className="routine-text-nighttime">
         <h2>Nighttime Routine</h2>
         <ul>
-          <li>Facial wash</li>
-          <li>Toner</li>
-          <li>Serum</li>
-          <li>Moisturizer</li>
+          {products.length > 0 ? (
+            products.map((product, index) => (
+              <li key={index}>{product.trim()}</li>
+            ))
+          ) : (
+            <p>No nighttime routine provided.</p>
+          )}
         </ul>
       </div>
     </div>
