@@ -37,138 +37,93 @@ const SkinAIForm = () => {
     { title: "Upload Image" },
   ];
 
-  const questions = [
+  const medicalQuestions = [
     {
       label: "What best describes your skin type?",
-      options: ["Dry", "Combination", "Oily"],
+      options: ["DRY", "COMBINATION", "OILY"],
       multiple: false,
-      images: [
-        dryImg,
-        comboImg,
-        oilyImg,
-      ],
+      images: [dryImg, comboImg, oilyImg],
     },
     {
       label: "What are your skin concerns?",
       options: [
-        "Large pores",
-        "Wrinkles",
-        "Sun spots",
-        "Bumpy skin",
-        "Sebaceous filaments",
-        "Hyperpigmentation",
-        "Blackheads",
-        "Acne scars",
-        "Flaky skin",
+        "LARGE PORES", "WRINKLES", "SUNSPOTS", "BUMPY SKIN", "SEBACEOUS FILAMENTS",
+        "HYPERPIGMENTATION", "BLACKHEADS", "ACNE SCARS", "FLAKY SKIN"
       ],
       images: [
-        poreImg,
-        wrinkleImg,
-        sunImg,
-        bumpyImg,
-        sebumImg,
-        hyperImg,
-        blackheadImg,
-        scarImg,
-        dryImg,
+        poreImg, wrinkleImg, sunImg, bumpyImg, sebumImg, hyperImg, blackheadImg, scarImg, dryImg
       ],
       multiple: true,
     },
     {
       label: "Do you have sensitive skin?",
-      options: ["Yes", "No", "I don’t know"],
-      images: [
-        dryImg,
-        dryImg,
-        dryImg,
-      ],
+      options: ["YES", "NO", "DON'T KNOW"],
+      images: [dryImg, dryImg, dryImg],
       multiple: false,
     },
     {
       label: "Where is your main concern?",
       options: [
-        "Cheeks",
-        "T-zone",
-        "Chin",
-        "Arms/Hands",
-        "Legs/Feet",
-        "Neck",
-        "Shoulders",
-        "Back",
-        "Chest",
+        "CHEEKS", "T-ZONE", "CHIN", "ARMS/HANDS", "LEGS/FEET", "NECK",
+        "SHOULDERS", "BACK", "CHEST"
       ],
-      images: [
-        dryImg,
-        dryImg,
-        dryImg,
-        dryImg,
-        dryImg,
-        dryImg,
-        dryImg,
-        dryImg,
-        dryImg,
-      ],
+      images: [dryImg, dryImg, dryImg, dryImg, dryImg, dryImg, dryImg, dryImg, dryImg],
       multiple: true,
     },
+  ];
+  
+  const lifestyleQuestions = [
     {
       label: "Are you a morning bird or a night owl?",
-      options: ["Morning bird", "Night owl", "Neither"],
-      images: [
-        dryImg,
-        dryImg,
-        dryImg,
-      ],
+      options: ["MORNING BIRD", "NIGHT ORL", "NEITHER"],
+      images: [dryImg, dryImg, dryImg],
       multiple: false,
     },
     {
       label: "How many hours do you exercise per week?",
       options: ["0-2", "3-6", "7+"],
-      images: [
-        dryImg,
-        dryImg,
-        dryImg,
-      ],
+      images: [dryImg, dryImg, dryImg],
       multiple: false,
     },
     {
       label: "How many hours of sleep do you typically get each night?",
-      options: ["6 or less", "7-8", "9-10"],
-      images: [
-        dryImg,
-        dryImg,
-        dryImg,
-        dryImg,
-      ],
+      options: ["6 OR LESS", "7-8", "9-10"],
+      images: [dryImg, dryImg, dryImg, dryImg],
       multiple: false,
     },
-  ];
+  ];  
 
   const handleSelect = (value) => {
-    if (questions[currentQuestion].multiple) {
-      const prevValues = formData[questions[currentQuestion].label] || [];
+    const currentQuestions = currentStep === 1 ? medicalQuestions : lifestyleQuestions;
+    const currentQuestionData = currentQuestions[currentQuestion];
+  
+    if (currentQuestionData.multiple) {
+      const prevValues = formData[currentQuestionData.label] || [];
       const newValues = prevValues.includes(value)
         ? prevValues.filter((item) => item !== value)
         : [...prevValues, value];
       setFormData({
         ...formData,
-        [questions[currentQuestion].label]: newValues,
+        [currentQuestionData.label]: newValues,
       });
     } else {
-      setFormData({ ...formData, [questions[currentQuestion].label]: value });
+      setFormData({ ...formData, [currentQuestionData.label]: value });
       handleNext();
     }
-  };
+  };  
 
   const handleNext = () => {
-    if (currentStep === 1 && currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      carouselRef.current?.next();
-    } else if (currentStep === 1 && currentQuestion === questions.length - 1) {
-      setCurrentStep(2);
+    if (currentStep === 1) {
+      if (currentQuestion < (currentStep === 1 ? medicalQuestions : lifestyleQuestions).length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        carouselRef.current?.next();
+      } else {
+        setCurrentStep(2);
+      }
     } else if (currentStep === 0) {
       setCurrentStep(1);
     }
-  };
+  };  
 
   const handleBack = () => {
     if (currentStep === 1 && currentQuestion > 0) {
@@ -237,7 +192,7 @@ const SkinAIForm = () => {
         return (
           <div className="form-content">
             <Carousel ref={carouselRef} dots={false} effect="scrollx">
-              {questions.map((question, index) => (
+              {currentStep === 1 && medicalQuestions.concat(lifestyleQuestions).map((question, index) => (
                 <div key={index}>
                   <h3 className="question-title">{question.label}</h3>
                   <Row gutter={[16, 16]} className="options">
@@ -252,10 +207,10 @@ const SkinAIForm = () => {
                           {question.images && question.images[idx] ? (
                             <img src={question.images[idx]} alt={option} />
                           ) : (
-                            <span>{option}</span>
+                            <span className="option-text">{option}</span>
                           )}
                         </div>
-                        <p>{option}</p> {/* Text label below the image */}
+                        <p className="option-text">{option}</p> {/* Text label below the image */}
                       </Col>
                     ))}
                   </Row>

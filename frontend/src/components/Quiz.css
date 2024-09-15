@@ -1,7 +1,16 @@
+@font-face {
+  font-family: 'CustomFont';
+  src: url('../assets/tan-mon-cheri.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'OtherFont';
+  src: url('../assets/HankenGrotesk.ttf') format('truetype');
+}
+
 body {
   background-color: var(--very-light);
   margin: 0;
-  padding: 40px 0;
   max-height: 100vh;
 }
 
@@ -32,23 +41,16 @@ body {
   margin-bottom: 20px;
 }
 
-/* .form-container {
-  margin: 0 auto;
+.form-container {
   border-radius: 16px;
   padding: 40px;
   text-align: center;
   min-height: 500px;
-} */
-
-.options {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  width: 100%;
 }
+
 .option-circle {
+  position: relative; /* Change to relative positioning */
   width: 50%;
-  aspect-ratio: 1 / 1;
   border-radius: 50%;
   padding: 0;
   display: flex;
@@ -68,9 +70,23 @@ body {
 }
 
 .option-circle.selected {
-  background-color: var(
-    --hover-brown
-  ); /* Change background color when selected */
+  border: 3px solid #3dbdb0; /* Highlight color for selected option */
+}
+
+.option-text {
+  position: absolute; /* Absolute positioning for the text */
+  color: white;
+  text-align: center;
+  font-family: 'OtherFont', sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 1px; /* Adjust letter spacing if needed */
+  z-index: 1;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust to center */
+  padding: 0 5px; /* Optional: add padding to avoid text touching the edges */
+  word-break: break-word; /* Break text if too long */
 }
 
 .navigation-buttons {
