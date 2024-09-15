@@ -81,7 +81,7 @@ const Profile = ({
 
   const fetchAssistant = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/get_assistant");
+      const response = await axios.get("http://localhost:5000/get_assistant", {withCredentials: true});
       return response.data;
     } catch (error) {
       console.error("Error fetching assistant:", error);

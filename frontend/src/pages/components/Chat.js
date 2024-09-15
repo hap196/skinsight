@@ -141,7 +141,7 @@ const Chat = ({
             onPressEnter={handleKeyPress}
             placeholder="Type your message..."
             autoSize={{ minRows: 1, maxRows: 4 }}
-            style={{ width: "100%" }} // Make textarea span the full width
+            style={{ width: "260px" }} // Make textarea span the full width
           />
           <Button
             type="primary"
