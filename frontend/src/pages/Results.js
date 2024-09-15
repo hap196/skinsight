@@ -19,15 +19,9 @@ const Results = () => {
   }
 
   // Parse the GPT response JSON for product recommendations and routines
-  const ingredients = gptResponse?.ingredients || [];
-  const ingredientDescriptions = gptResponse?.ingredient_descriptions || {};
+  const ingredients = gptResponse?.ingredients || {}; // {ingredient: description}
   const morning = gptResponse?.morning || "";
   const night = gptResponse?.night || "";
-
-  const ingredientList = ingredients.map((ingredient) => ({
-    ingredient,
-    description: ingredientDescriptions[ingredient] || "No description available",
-  }));
 
   useEffect(() => {
     // Smooth scrolling function
@@ -69,25 +63,6 @@ const Results = () => {
         }
       });
     }
-
-    // Create floating elements (Bubbles, sparkles, sun, and moon) - limited number of emojis
-    const floatingElements = [
-      { emoji: "🌞", size: "40px" },
-      { emoji: "✨", size: "30px" },
-      { emoji: "🌙", size: "50px" },
-      { emoji: "🫧", size: "40px" },
-      { emoji: "✨", size: "60px" },
-    ];
-
-    floatingElements.forEach((element) => {
-      const floatingEl = document.createElement("div");
-      floatingEl.className = "floating-element";
-      floatingEl.style.fontSize = element.size;
-      floatingEl.textContent = element.emoji;
-      floatingEl.style.left = `${Math.random() * 200}vw`; // Adjusted to limit the spread
-      floatingEl.style.top = `${Math.random() * 100}vh`;
-      document.body.appendChild(floatingEl);
-    });
 
     // Horizontal scroll handler
     const handleScroll = (e) => {
@@ -136,22 +111,25 @@ const Results = () => {
 
   return (
     <div className="container">
-      <section className="section product-recommendations">
+      {/* <section className="section product-recommendations">
         <h2>Identified Skin Concerns</h2>
         <p>{prediction || "No skin concerns identified."}</p>
-      </section>
-      
+      </section> */}
+
       {/* Product Recommendations Section */}
       <section className="section product-recommendations">
         <h2>Product Recommendations</h2>
-        {ingredients.length > 0 ? (
-          <ul>
-            {ingredients.map((ingredient, index) => (
+        {Object.keys(ingredients).length > 0 ? (
+          <ol>
+            {Object.entries(ingredients).map(([ingredient, description], index) => (
               <li key={index}>
-                <strong>{ingredient}:</strong> {ingredientDescriptions[ingredient]}
+                <strong>{ingredient}</strong>
+                <ul style={{ marginLeft: "20px" }}>
+                  <li>{description}</li>
+                </ul>
               </li>
             ))}
-          </ul>
+          </ol>
         ) : (
           <p>No product recommendations available.</p>
         )}
