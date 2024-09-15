@@ -194,7 +194,7 @@ const SkinAIForm = () => {
     }
   };
 
-  const handleBack = () => {
+const handleBack = () => {
     if (currentStep === 2) {
       setCurrentStep(1);
       setCurrentQuestion(lifestyleQuestions.length - 1);
@@ -235,30 +235,7 @@ const SkinAIForm = () => {
       );
     }
 
-    if (currentStep === 3) {
-      return (
-        <div className="form-content">
-          <h3 className="question-title">Upload an image of your skin concern</h3>
-          <Upload
-            fileList={fileList}
-            onChange={handleImageUpload}
-            listType="picture"
-            beforeUpload={() => false}
-          >
-            <Button icon={<UploadOutlined />}>Select Image</Button>
-          </Upload>
-          <Button
-            type="primary"
-            onClick={handleSubmit} // Existing submit handler
-            disabled={!file || isLoading} // Enable submit button only if a file is uploaded
-          >
-            {isLoading ? "Processing..." : "Submit"}
-          </Button>
-        </div>
-      );
-    }
-
-    const questions = currentStep === 1 ? medicalQuestions : lifestyleQuestions;
+    const questions = currentStep === 1 ? lifestyleQuestions : medicalQuestions;
     return (
       <div className="form-content">
         <Carousel ref={carouselRef} dots={false} effect="scrollx">
@@ -291,11 +268,10 @@ const SkinAIForm = () => {
 
       {isGeneratingSong && (
         <div className="loading-indicator">
-          <Spin tip="Generating a song just for you..." />
+          <Spin/>
+          <p>Analyzing your skin...</p>
         </div>
       )}
-
-      {songReady && <p>Your song is ready! Proceeding to image upload...</p>}
 
       <div className="steps-container">
         <Steps current={currentStep}>

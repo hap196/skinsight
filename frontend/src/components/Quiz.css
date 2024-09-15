@@ -135,3 +135,14 @@ p {
 .ant-steps-item {
   flex: 1;
 }
+
+.loading-indicator {
+  display: flex;
+  position: fixed;
+  bottom: 50px;
+  right: 45%;
+}
+
+.loading-indicator p {
+  margin-left: 10px;
+}
