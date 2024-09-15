@@ -19,7 +19,7 @@ const Home = () => {
         <h1>
           sk<span className="highlight">insight</span>
         </h1>
-        <p>ACHIEVING HEALTHY, BEAUTIFUL SKIN</p>
+        <p>ACHIEVING HEALTHY, CONFIDENT SKIN</p>
         <button className="get-started-button" onClick={scrollToBottom}>
           GET STARTED
         </button>
@@ -39,7 +39,7 @@ const Home = () => {
         <h2>skincare recommendations</h2>
         <h4>powered with AI</h4>
         <p>
-          We use an AI model trained on dermatology datasets to identify your
+          Our personalized dermatology assistant identifies your
           skin conditions in real time. Simply complete a quiz and upload a
           photo of your skin to receive personalized skincare recommendations.
           AND personalized music to accompany your skincare routine!
