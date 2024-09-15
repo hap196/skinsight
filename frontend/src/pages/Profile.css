@@ -47,8 +47,18 @@
 }
 
 .brown-button {
-  background-color: #8B4513;
-  color: white;
+  background-color: transparent;
+  width: 250px;
+  height: 40px;
+  border-radius: 20px;
+  color: black;
+  border: 1px solid black !important;
+}
+
+.brown-button:hover {
+  background-color: transparent !important;
+  border: 1px solid #9c7a50 !important;
+  color: #9c7a50 !important;
 }
 
 .profile-text {
