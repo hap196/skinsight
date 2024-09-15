@@ -81,7 +81,9 @@ const Profile = ({
 
   const fetchAssistant = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/get_assistant", {
+      const response = await axios.post("http://localhost:5000/get_assistant", {
+        context: `Here is the user's information. Skin condition: ${identifiedSkinCondition}. Skin concerns: ${skinConcerns}.`,
+        threadId: "",
         withCredentials: true,
       });
       return response.data;
@@ -94,6 +96,7 @@ const Profile = ({
     const data = await fetchAssistant();
     console.log("Assistant initiated");
     setAssistantId(data?.assistant_id || null);
+    setThreadId(data?.threadId || null);
   };
 
   useEffect(() => {
