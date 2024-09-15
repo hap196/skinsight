@@ -27,7 +27,7 @@ const Home = () => {
         <h2>skincare recommendations</h2>
         <h4>powered with AI</h4>
         <p>We use an AI model trained on dermatology datasets to identify your skin conditions in real time.
-          Simply complete a quiz and upload a photo of your skin to receive personalized skincare recommendations.
+          Simply complete a quiz and upload a photo of your skin to receive personalized skincare recommendations. AND personalized music to accompany your skincare routine!
         </p>
       </section>
       <section className="section3">
