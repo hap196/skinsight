@@ -18,6 +18,8 @@ const Results = () => {
   const [userName, setUserName] = useState("Guest");
   const [isChatOpen, setIsChatOpen] = useState(false);
 
+  axios.defaults.withCredentials = true;
+  
   // Parse GPT response if it's a string
   useEffect(() => {
     if (typeof gptResponseRaw === "string") {
@@ -137,7 +139,6 @@ const Results = () => {
 
   return (
     <div className="container">
-      <h2 className="greeting">Hi, {userName}!</h2>
 
       <div className="floating-images">
         {starImages.map((image, index) => (
@@ -152,6 +153,7 @@ const Results = () => {
       </div>
 
       <section className="section product-recommendations">
+      <h2 className="greeting">Hi, {userName}!</h2>
         <h2>Product Recommendations</h2>
         {Object.keys(ingredients).length > 0 ? (
           <ol>
@@ -172,7 +174,6 @@ const Results = () => {
         {/* Audio Player */}
         {audio_url ? (
           <div className="song-controls">
-            <h3>Your Generated Song</h3>
             <audio id="background-audio" controls autoPlay loop>
               <source src={audio_url} type="audio/mpeg" />
               Your browser does not support the audio element.

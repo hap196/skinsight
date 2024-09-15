@@ -153,9 +153,9 @@ def profile():
     else:
         response = jsonify({"error": "User not logged in"}), 401
 
-    # Add necessary CORS headers to allow credentials
-    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
-    response.headers.add("Access-Control-Allow-Credentials", "true")
+    # # Add necessary CORS headers to allow credentials
+    # response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    # response.headers.add("Access-Control-Allow-Credentials", "true")
     
     return response
 
