@@ -78,8 +78,8 @@ const Chat = ({
   };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  }, [messages]);  
 
   return (
     <Layout
@@ -95,7 +95,7 @@ const Chat = ({
     >
       <Header
         style={{
-          backgroundColor: "#68563f",
+          backgroundColor: "#a0876e",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -129,7 +129,7 @@ const Chat = ({
       <Footer style={{ padding: "16px", position: "relative" }}>
         {isWaiting && (
           <Spin
-            style={{ position: "absolute", bottom: "100px", left: "10px" }}
+            style={{ position: "absolute", bottom: "100px", left: "30px" }}
             size="small"
           />
         )}
@@ -141,13 +141,13 @@ const Chat = ({
             onPressEnter={handleKeyPress}
             placeholder="Type your message..."
             autoSize={{ minRows: 1, maxRows: 4 }}
-            style={{ width: "100%" }} // Make textarea span the full width
+            style={{ width: "260px" }} // Make textarea span the full width
           />
           <Button
             type="primary"
             icon={<SendOutlined />}
             onClick={handleSendMessage}
-            style={{ backgroundColor: "#68563f", borderColor: "#68563f" }}
+            style={{ backgroundColor: "#a0876e", borderColor: "#a0876e" }}
           />
         </Space>
       </Footer>
