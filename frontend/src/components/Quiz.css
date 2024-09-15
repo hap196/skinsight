@@ -10,23 +10,23 @@
 
 body {
   background-color: var(--very-light);
-  margin: 0;
-  max-height: 100vh;
 }
 
 .page-title {
   text-align: center;
-  color: var(--dark-brown);
+  color: black;
+  font-weight: lighter;
+  font-family: 'CustomFont', sans-serif;
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  letter-spacing: 3px;
+  margin-top: 60px;
+  margin-bottom: 30px;
 }
 
 .form-wrapper {
-  max-width: 85%;
+  max-width: 60%;
   margin: 0 auto;
-  display: flex;
   flex-direction: column;
-  max-height: 100vh;
 }
 
 .form-container {
@@ -34,34 +34,15 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-bottom: 40px;
-}
-
-.steps-container {
-  margin-bottom: 20px;
-}
-
-.form-container {
   border-radius: 16px;
-  padding: 40px;
   text-align: center;
-  min-height: 500px;
 }
 
 .option-circle {
-  position: relative; /* Change to relative positioning */
-  width: 50%;
   border-radius: 50%;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 1.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
   margin: 0 12px;
-  box-sizing: border-box;
   transition: transform 0.2s;
 }
 
@@ -70,7 +51,7 @@ body {
 }
 
 .option-circle.selected {
-  border: 3px solid #3dbdb0; /* Highlight color for selected option */
+  border: 3px solid #3dbdb0;;
 }
 
 .option-text {
@@ -78,21 +59,21 @@ body {
   color: white;
   text-align: center;
   font-family: 'OtherFont', sans-serif;
-  font-weight: bold;
+  font-weight: 300;
   font-size: 18px;
-  letter-spacing: 1px; /* Adjust letter spacing if needed */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  letter-spacing: 2px; /* Adjust letter spacing if needed */
   z-index: 1;
+  width: 220px;
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust to center */
-  padding: 0 5px; /* Optional: add padding to avoid text touching the edges */
   word-break: break-word; /* Break text if too long */
 }
 
 .navigation-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
 }
 
 .icon {
@@ -109,23 +90,30 @@ p {
 }
 
 .question-title {
-  font-size: 2rem;
-  color: var(--dark-brown);
-  font-weight: bold;
-  margin-bottom: 24px;
-  text-align: left;
+  font-size: 1.5rem;
+  font-family: 'OtherFont', sans-serif;
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: black;
+  margin-bottom: 32px;
+  text-align: center;
 }
 
 .nav-link {
   color: var(--accent);
   text-decoration: none;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
   transition: color 0.3s ease;
+  margin-top: 20px;
+  margin-bottom: 100px;
+  text-align: center; /* Center the link */
+  display: block; /* Ensure it occupies its own line */
 }
 
 .nav-link:hover {
   color: var(--accent-hover);
+  cursor: pointer;
 }
 
 .ant-steps {
@@ -144,29 +132,4 @@ p {
 .ant-steps-item-process .ant-steps-item-icon {
   background-color: var(--accent) !important; 
   border-color: var(--accent) !important; 
-}
-
-/* .ant-steps-item-finish .ant-steps-item-icon {
-  background-color: var(--accent) !important; 
-  border-color: var(--accent) !important; 
-} */
-
-.ant-steps-item-color {
-  color: var(--accent) !important; 
-}
-.carousel-wrapper {
-  width: 100%;
-  overflow: hidden;
-}
-
-.ant-carousel {
-  width: 100%;
-}
-
-.slick-slide {
-  visibility: hidden;
-}
-
-.slick-slide.slick-active {
-  visibility: visible;
 }
