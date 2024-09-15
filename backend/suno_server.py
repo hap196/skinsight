@@ -1,33 +1,40 @@
-import os
-import time
-import re
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
-from openai import OpenAI
-import json
+import requests
 import logging
-from dotenv import load_dotenv
-load_dotenv()
-
-# https://suno-ai.notion.site/External-Suno-HackMIT-API-Docs-a47928f8b7ca4b7ab8e0af8a1323ebf1
-# https://vercel.com/josiexws-projects/suno-api-slft
-# https://github.com/gcui-art/suno-api
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})  # Allow all origins for API endpoints
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 base_url = 'https://suno-api-slft-f131g9sej-josiexws-projects.vercel.app'
 
-@app.route('/generate', methods=['POST'])
+@app.route('{base_url}/api/generate/v2/', methods=['POST'])
 def generate():
     try:
-        pass
+        data = request.json
+        response = requests.post(f"{base_url}/api/generate/v2/", json=data)
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            return make_response(f"Error from Suno API: {response.text}", response.status_code)
     except Exception as e:
         logger.error('Error generating music: %s', str(e))
         return make_response(f"An error occurred while fetching assistant: {str(e)}", 500)
+
+@app.route('{base_url}/api/generate/v2/<string:track_id>', methods=['GET'])
+def get_audio(track_id):
+    try:
+        response = requests.get(f"{base_url}/api/generate/v2/{track_id}")
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            return make_response(f"Error from Suno API: {response.text}", response.status_code)
+    except Exception as e:
+        logger.error('Error fetching audio: %s', str(e))
+        return make_response(f"An error occurred while fetching audio: {str(e)}", 500)
 
 if __name__ == '__main__':
     app.run(debug=True)

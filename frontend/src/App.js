@@ -4,7 +4,8 @@ import Home from "./pages/Home";
 import Predict from "./pages/Predict";
 import Quiz from "./components/Quiz";
 import Profile from "./pages/Profile";
-import Results from "./pages/Results"
+import Results from "./pages/Results";
+import Music from "./pages/components/Music";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/music" element={<Music />} />
         </Routes>
       </div>
     </Router>

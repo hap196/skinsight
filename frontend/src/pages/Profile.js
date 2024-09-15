@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chat from "./components/Chat";
 import axios from "axios";
-import './Profile.css';
-import { Button, Typography, Layout, Space } from "antd";
-import { UpOutlined, LeftOutlined, EditOutlined } from '@ant-design/icons'; // Import Edit icon
+import "./Profile.css";
+import { Button, Typography, Space } from "antd";
+import { UpOutlined, LeftOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
-const { Sider, Content } = Layout;
 
-const Profile = () => {
+const Profile = ({
+  identifiedSkinCondition,
+  skinConcerns,
+  isCollapsed,
+  toggleCollapse,
+}) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false); // State to control sidebar collapse
   const [assistantId, setAssistantId] = useState(null);
   const [messages, setMessages] = useState(() => {
     const savedMessages = sessionStorage.getItem("messages");
@@ -21,21 +24,25 @@ const Profile = () => {
     return savedThread ? JSON.parse(savedThread) : "";
   });
   const [userName, setUserName] = useState("Guest");
-  const question_labels = ["What are your skin concerns?", "Do you have sensitive skin?", "Where is your main concern?"]
+
+  const question_labels = [
+    "What are your skin concerns?",
+    "Do you have sensitive skin?",
+    "Where is your main concern?",
+  ];
   const [userAttributes, setUserAttributes] = useState(
     question_labels.reduce((acc, label) => {
       acc[label] = null;
       return acc;
-    }, {}));
+    }, {})
+  );
   const hasInitializedRef = useRef(false);
 
-  // send cookies with requests
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
     if (!hasInitializedRef.current) {
       initChatBot();
-      // fetch user attributes
       fetchUserAttributes();
       hasInitializedRef.current = true;
     }
@@ -55,14 +62,12 @@ const Profile = () => {
     }
   }, []);
 
-  // fetch the user's attributes from the backend
   const fetchUserAttributes = async () => {
     try {
       const response = await axios.get("http://localhost:5001/profile");
       if (response.data.name) {
         setUserName(response.data.name);
       } else {
-        console.log("User is not logged in:", response.data.error);
         setUserName("Guest");
       }
       if (response.data.quiz_attributes) {
@@ -70,11 +75,7 @@ const Profile = () => {
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        console.error("User not logged in:", error.response.data);
-        // redirect to login page if not logged in
         window.location.href = "http://localhost:5001/login";
-      } else {
-        console.error("Error fetching user attributes:", error.message);
       }
     }
   };
@@ -90,16 +91,7 @@ const Profile = () => {
 
   const initChatBot = async () => {
     const data = await fetchAssistant();
-    console.log("Assistant initiated");
     setAssistantId(data?.assistant_id || null);
-  };
-
-  const handleChatToggle = () => {
-    setIsChatOpen(!isChatOpen);
-  };
-
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
   };
 
   useEffect(() => {
@@ -111,131 +103,58 @@ const Profile = () => {
   }, [threadId]);
 
   return (
-    <Layout className="app-container" style={{ height: '100vh', backgroundColor: '#F3E4C7' }}>
-      {/* Collapsed arrow */}
-      {isCollapsed && (
-        <Button
-          type="text"
-          onClick={toggleCollapse}
+    <div className={`profile-sidebar ${isCollapsed ? "collapsed" : ""}`}>
+      <div className="profile-content">
+        <div
           style={{
-            position: 'absolute',
-            top: '50px',
-            left: '0px',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: 'black',
-            display: 'flex',
-            alignItems: 'center',
-            transform: 'rotate(90deg)',
-            zIndex: 1000,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <UpOutlined style={{ marginRight: '5px' }} />
-          View Profile
-        </Button>
-      )}
-
-      <Sider
-        width={300}
-        className="profile-sidebar"
-        collapsible
-        collapsed={isCollapsed}
-        collapsedWidth={0}
-        trigger={null}
-        style={{
-          backgroundColor: '#F3E4C7',
-          color: 'black',
-          height: '100vh',
-          padding: '20px',
-          overflow: 'hidden',
-          transition: 'transform 0.3s ease',
-          transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {/* Replace static text with the user's name */}
-          <Title level={3} style={{ color: 'black' }}>{userName}'s Profile</Title>
+          <Title level={3} className="profile-sidebar-title">
+            {userName}'s Profile
+          </Title>
           <Button
             type="text"
             icon={isCollapsed ? <UpOutlined /> : <LeftOutlined />}
             shape="circle"
             onClick={toggleCollapse}
-            style={{
-              color: 'black',
-              fontSize: '16px',
-              borderRadius: '50%',
-              border: 'none',
-              color: 'black'
-            }}
+            className="collapse-button"
           />
         </div>
-        <Space direction="vertical">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
+        <Space direction="vertical" style={{ width: "100%" }}>
+          <div className="profile-section">
+            <Text className="profile-label">
               <strong>Skin Conditions:</strong>
             </Text>
-            <Button
-              type="text"
-              style={{ color: 'black' }}
-            />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              TODO: skin conditions
+          <div style={{ marginBottom: "10px" }}>
+            <Text style={{ color: "black" }}>
+              {identifiedSkinCondition || "No skin condition identified."}
             </Text>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              <strong>Skin Type:</strong>
-            </Text>
-            <Button
-              type="text"
-              icon={<EditOutlined />}
-              style={{ color: 'black' }}
-            />
-          </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              {userAttributes["What is your skin type?"] || "No skin type inputted."}
-            </Text>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
+          <div className="profile-section">
+            <Text className="profile-label">
               <strong>Skin Concerns:</strong>
             </Text>
-            <Button
-              type="text"
-              icon={<EditOutlined />}
-              style={{ color: 'black' }}
-            />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              {userAttributes["What are your skin concerns?"]  || "No skin concerns inputted."}
+          <div style={{ marginBottom: "10px" }}>
+            <Text style={{ color: "black" }}>
+              {skinConcerns || "No skin concerns inputted."}
             </Text>
           </div>
         </Space>
-        <div className="chat-launcher" style={{ marginTop: "20px", textAlign: 'center' }}>
-        <Button className="brown-button" onClick={handleChatToggle}>
+        <div className="chat-launcher">
+          <Button
+            className="brown-button"
+            onClick={() => setIsChatOpen(!isChatOpen)}
+          >
             Talk to our dermatology assistant
-        </Button>
+          </Button>
         </div>
-      </Sider>
-      <Layout>
-        <Content style={{ padding: '20px' }}>
-          {isChatOpen && (
-            <Chat
-              handleClose={handleChatToggle}
-              assistantId={assistantId}
-              messages={messages}
-              setMessages={setMessages}
-              threadId={threadId}
-              setThreadId={setThreadId}
-            />
-          )}
-        </Content>
-      </Layout>
-    </Layout>
+      </div>
+    </div>
   );
 };
 
