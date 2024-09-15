@@ -80,6 +80,35 @@ def auth_callback():
     print("Session after login:", session["user"])
     return redirect("http://localhost:3000/quiz")
 
+@app.route("/saveQuizData", methods=["POST"])
+def save_quiz_data():
+    user = session.get("user")
+    if not user:
+        return jsonify({"error": "User not logged in"}), 401
+
+    try:
+        data = request.get_json()
+        prediction = data.get('prediction')
+        gptResponse = data.get('gptResponse')
+
+        # Update user's document with the quiz data
+        db.user_collection.update_one(
+            {"email": user["email"]},
+            {
+                "$set": {
+                    "quiz_data": {
+                        "prediction": prediction,
+                        "gpt_response": gptResponse
+                    }
+                }
+            }
+        )
+
+        return jsonify({"message": "Quiz data saved successfully"}), 200
+    except Exception as e:
+        app.logger.error(f"Error saving quiz data: {str(e)}")
+        return jsonify({"error": "Failed to save quiz data"}), 500
+
 
 @app.route("/logout")
 def logout():
