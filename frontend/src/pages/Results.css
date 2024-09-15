@@ -21,8 +21,8 @@ html {
   width: 200vw;
   background: linear-gradient(
     135deg,
-    #e6dcc7 0%,
-    #e6dcc7 40%,
+    #e3c69e 0%,
+    #e6cba5 40%,
     #8dcde2 70%,
     #333e85 100%
   );
@@ -155,7 +155,7 @@ html {
   padding: 10px 20px;
   background-color: rgba(255, 255, 255, 0.5);
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
   font-family: "OtherFont", sans-serif;
   z-index: 1001;

@@ -1,181 +1,188 @@
 @font-face {
-    font-family: 'CustomFont';
-    src: url('../assets/tan-mon-cheri.ttf') format('truetype');
+  font-family: "CustomFont";
+  src: url("../assets/tan-mon-cheri.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'OtherFont';
-    src: url('../assets/HankenGrotesk.ttf') format('truetype');
+  font-family: "OtherFont";
+  src: url("../assets/HankenGrotesk.ttf") format("truetype");
 }
 
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'OtherFont', sans-serif;
-    scroll-behavior: smooth;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: "OtherFont", sans-serif;
+  scroll-behavior: smooth;
 }
 
 .home {
-    text-align: center;
-    background-color: #f0f0f0;
+  text-align: center;
+  background-color: #f0f0f0;
 }
 
 .section1 {
-    background-image: url('../assets/background.png');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+  background-image: url("../assets/background.png");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .section1 h1 {
-    font-family: 'CustomFont', sans-serif;
-    font-size: 8rem;
-    letter-spacing: 6px;
-    font-weight: lighter;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+  font-family: "CustomFont", sans-serif;
+  font-size: 8rem;
+  letter-spacing: 6px;
+  font-weight: lighter;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
 .section1 h1 span {
-    color: #7CFFED;
+  color: #7cffed;
 }
 
 .section1 p {
-    font-family: 'OtherFont', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 300;
-    letter-spacing: 8px;
-    color: white;
-    top: 27%;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
-    position: relative;
-    z-index: 0;
-    margin-bottom: 70px;
+  font-family: "OtherFont", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 8px;
+  color: white;
+  top: 27%;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 0;
+  margin-bottom: 70px;
 }
 
-.section2, .section3 {
-    padding: 20px;
+.section2,
+.section3 {
+  padding: 20px;
 }
 
 .section2 {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 .section2 h2 {
-    font-family: 'CustomFont', sans-serif;
-    font-size: 2.2rem;
-    font-weight: lighter;
-    letter-spacing: 4px;
-    position: relative;
-    top: 60px
+  font-family: "CustomFont", sans-serif;
+  font-size: 2.2rem;
+  font-weight: lighter;
+  letter-spacing: 4px;
+  position: relative;
+  top: 60px;
 }
 
 .section2 h4 {
-    font-family: 'OtherFont', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 300;
-    letter-spacing: 3px;
-    margin-top: -20px;
-    position: relative;
-    top: 60px
+  font-family: "OtherFont", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 3px;
+  margin-top: -20px;
+  position: relative;
+  top: 60px;
 }
 
 .section2 p {
-    font-family: 'OtherFont', sans-serif;
-    margin-left: 200px;
-    margin-right: 200px;
-    font-size: 1.1rem;
-    font-weight: 300;
-    letter-spacing: 1px;
-    line-height: 2;
-    position: relative;
-    top: 60px
+  font-family: "OtherFont", sans-serif;
+  margin-left: 200px;
+  margin-right: 200px;
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  line-height: 2;
+  position: relative;
+  top: 60px;
 }
 
 .section3 {
-    background-image: url('../assets/skincare.png');
-    background-size: cover;
-    text-align: center;
-    height: 70vh;
-    position: relative;
-    top: 200px;
+  background-image: url("../assets/skincare.png");
+  background-size: cover;
+  text-align: center;
+  height: 55vh;
+  position: relative;
+  top: 200px;
 }
 
 .section3 h2 {
-    font-family: 'CustomFont', sans-serif;
-    font-size: 2.2rem;
-    font-weight: lighter;
-    letter-spacing: 4px;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
-    position: absolute;
-    top: 25%;
-    left: 27%;
+  font-family: "CustomFont", sans-serif;
+  font-size: 2.2rem;
+  font-weight: lighter;
+  letter-spacing: 4px;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+  margin-top: 8%;
+  text-align: center;
 }
 
 .section3 p {
-    font-family: 'OtherFont', sans-serif;
-    margin-left: 200px;
-    margin-right: 200px;
-    font-size: 1.2rem;
-    font-weight: 400;
-    letter-spacing: 1px;
-    line-height: 1.5;
-    position: absolute;
-    top: 40%;
-    left: 0%;
+  font-family: "OtherFont", sans-serif;
+  margin-left: 200px;
+  margin-right: 200px;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  line-height: 1.5;
 }
 
 button {
-    padding: 10px;
-    width: 225px;
-    border-radius: 30px;
-    font-size: 14px;
-    cursor: pointer;
+  padding: 10px;
+  width: 225px;
+  border-radius: 30px;
+  font-size: 14px;
+  cursor: pointer;
 }
-
+.section3 button {
+  margin-top: 2%;
+  border: none;
+  font-size: 1.2rem;
+  letter-spacing: 1.5px;
+  background-color: white;
+  border: 1.5px solid var(--norm-brown);
+  color: var(--norm-brown);
+  transition: border 0.3s ease, color 0.3s ease;
+  width: 500px;
+  height: 50px;
+}
 .section1 .get-started-button {
-    background-color: white;
-    color: #9c7a50;
-    border: none;
-    font-family: 'OtherFont', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 1.5px;
-    margin-top: 200px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  background-color: white;
+  color: var(--norm-brown);
+  border: none;
+  font-family: "OtherFont", sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 1.5px;
+  margin-top: 200px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 2px 2px 5px var(--dark-brown);
 }
 
 .section1 .get-started-button:hover {
-    background-color: #e6dcc7;
-}
-
-.section3 button {
-    margin-top: 20px;
-    margin-bottom: 100px;
-    border: none;
-    font-size: 1.2rem;
-    letter-spacing: 1.5px;
-    background-color: white;
-    border: 1.5px solid black;
-    color: black;
-    transition: border 0.3s ease, color 0.3s ease;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
-    position: absolute;
-    top: 53%;
-    left: 40%;
+  background-color: #e6dcc7;
 }
 
 .section3 button:hover {
-    border: 1.5px solid #9c7a50;
-    color: #9c7a50;
+  border: 1.5px solid var(--dark-brown);
+  box-shadow: 0px 0px 5px var(--dark-brown);
+
+  color: var();
+}
+
+.section4 {
+  background-size: cover;
+  text-align: center;
+  height: 50px;
+  align-items: center;
+  position: relative;
+}
+
+.section4 p {
+  font-size: 1.2em;
 }
