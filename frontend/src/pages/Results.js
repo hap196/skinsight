@@ -3,25 +3,27 @@ import "./Results.css";
 import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
 import { useLocation } from "react-router-dom";
+<<<<<<< HEAD
+import starImg1 from "../assets/star.svg"
+=======
 import { Drawer } from "antd";
 import Profile from "./Profile";
+>>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
 
 const Results = () => {
-  // Get the passed prediction and recommendations from location state
   const location = useLocation();
-  let { prediction, gptResponse } = location.state || {}; // Fallback to empty if no state is passed
+  let { prediction, gptResponse } = location.state || {};
 
   if (typeof gptResponse === "string") {
     try {
-      gptResponse = JSON.parse(gptResponse); // Parse the string as JSON
+      gptResponse = JSON.parse(gptResponse);
     } catch (error) {
       console.error("Failed to parse GPT response:", error);
-      gptResponse = {}; // Fallback to an empty object if parsing fails
+      gptResponse = {};
     }
   }
 
-  // Parse the GPT response JSON for product recommendations and routines
-  const ingredients = gptResponse?.ingredients || {}; // {ingredient: description}
+  const ingredients = gptResponse?.ingredients || {};
   const morning = gptResponse?.morning || "";
   const night = gptResponse?.night || "";
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -35,100 +37,88 @@ const Results = () => {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
+    const smoothScroll = (target, duration) => {
+      let start = window.pageXOffset;
+=======
     // Smooth scrolling function
 
     function smoothScroll(target, duration) {
       let start = window.pageXOffset; // Start position is the current horizontal scroll
+>>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
       let distance = target - start;
       let startTime = null;
 
-      function animation(currentTime) {
+      const animation = (currentTime) => {
         if (startTime === null) startTime = currentTime;
         let timeElapsed = currentTime - startTime;
         let run = ease(timeElapsed, start, distance, duration);
-        window.scrollTo(run, window.pageYOffset); // Horizontal scrolling while retaining the vertical position
+        window.scrollTo(run, window.pageYOffset);
         if (timeElapsed < duration) requestAnimationFrame(animation);
-      }
+      };
 
-      function ease(t, b, c, d) {
+      const ease = (t, b, c, d) => {
         t /= d / 2;
         if (t < 1) return (c / 2) * t * t + b;
         t--;
         return (-c / 2) * (t * (t - 2) - 1) + b;
-      }
+      };
 
       requestAnimationFrame(animation);
-    }
+    };
 
-    // Scroll arrow functionality
-    const scrollArrow = document.querySelector(".scroll-arrow");
-    if (scrollArrow) {
-      scrollArrow.addEventListener("click", () => {
-        const currentScroll = window.pageXOffset;
-        const pageWidth = window.innerWidth;
-        const totalWidth = document.querySelector(".container").scrollWidth;
-
-        if (currentScroll + pageWidth >= totalWidth) {
-          smoothScroll(0, 1000); // Scroll back to start
-        } else {
-          smoothScroll(currentScroll + pageWidth, 1000); // Scroll to the next section
-        }
-      });
-    }
-
-    // Horizontal scroll handler
     const handleScroll = (e) => {
       if (e.deltaY !== 0) {
         e.preventDefault();
-        window.scrollBy(e.deltaY, 0); // Horizontal scroll
-        animateEmojis(); // Animate emojis slightly when scrolling
+        window.scrollBy(e.deltaY, 0);
       }
-    };
-
-    const animateEmojis = () => {
-      const floatingEls = document.querySelectorAll(".floating-element");
-      floatingEls.forEach((el) => {
-        const randomX = Math.random() * 20 - 10; // Slight movement
-        const randomY = Math.random() * 10 - 5;
-        el.style.transform = `translate(${randomX}px, ${randomY}px)`;
-      });
     };
 
     window.addEventListener("wheel", handleScroll, { passive: false });
 
-    // Update background gradient on scroll
     const handleGradientUpdate = () => {
-      const scrollPercentage =
-        window.pageXOffset /
-        (document.documentElement.scrollWidth - window.innerWidth);
-      const beigeToBlue = `linear-gradient(135deg, 
-                hsl(${40 + scrollPercentage * 80}, 70%, 90%), 
-                hsl(${200 - scrollPercentage * 100}, 100%, 85%))`;
-      const blueToNight = `linear-gradient(135deg, 
-                hsl(${200 - scrollPercentage * 100}, 85%, 85%), 
-                hsl(${270 - scrollPercentage * 70}, 60%, 30%))`;
+      const scrollPercentage = window.pageXOffset / (document.documentElement.scrollWidth - window.innerWidth);
+      const beigeToBlue = `linear-gradient(135deg, hsl(${40 + scrollPercentage * 80}, 70%, 90%), hsl(${200 - scrollPercentage * 100}, 100%, 85%))`;
+      const blueToNight = `linear-gradient(135deg, hsl(${200 - scrollPercentage * 100}, 85%, 85%), hsl(${270 - scrollPercentage * 70}, 60%, 30%))`;
 
-      document.body.style.background =
-        scrollPercentage < 0.5 ? beigeToBlue : blueToNight;
+      document.body.style.background = scrollPercentage < 0.5 ? beigeToBlue : blueToNight;
     };
 
     window.addEventListener("scroll", handleGradientUpdate);
 
-    // Cleanup event listeners when component unmounts
     return () => {
       window.removeEventListener("wheel", handleScroll);
       window.removeEventListener("scroll", handleGradientUpdate);
     };
   }, []);
 
+  const starImages = [
+    { src: starImg1, left: '5%', top: '20%' },
+    { src: starImg1, left: '20%', top: '70%' },
+    { src: starImg1, left: '50%', top: '5%' },
+    { src: starImg1, left: '70%', top: '55%' },
+    { src: starImg1, left: '90%', top: '20%' },
+    { src: starImg1, left: '110%', top: '70%' },
+    { src: starImg1, left: '120%', top: '0%' },
+    { src: starImg1, left: '140%', top: '20%' },
+    { src: starImg1, left: '185%', top: '50%' },
+    { src: starImg1, left: '170%', top: '10%' },
+    { src: starImg1, left: '160%', top: '80%' },
+  ];
+
   return (
     <div className="container">
-      {/* <section className="section product-recommendations">
-        <h2>Identified Skin Concerns</h2>
-        <p>{prediction || "No skin concerns identified."}</p>
-      </section> */}
-
-      {/* Product Recommendations Section */}
+      <div className="floating-images">
+        {starImages.map((image, index) => (
+          <img
+            key={index}
+            src={image.src}
+            alt={`star-${index}`}
+            className="floating-image"
+            style={{ left: image.left, top: image.top }}
+          />
+        ))}
+      </div>
       <section className="section product-recommendations">
         <button onClick={showDrawer} className="open-profile-button">
           Open Profile
@@ -163,13 +153,19 @@ const Results = () => {
         )}
       </section>
 
-      {/* Routines Section */}
       <section className="section routines">
+<<<<<<< HEAD
+        <div className="daytime-container">
+          <Daytime products={morning.split('.')} />
+        </div>
+        <div className="nighttime-container">
+          <Nighttime products={night.split('.')} />
+        </div>
+=======
         <Daytime products={morning.split(".")} />
         <Nighttime products={night.split(".")} />
+>>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
       </section>
-
-      <button className="scroll-arrow">&#8594;</button>
     </div>
   );
 };

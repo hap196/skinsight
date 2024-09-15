@@ -4,11 +4,8 @@ import "./Nighttime.css";
 const Nighttime = ({ products }) => {
   return (
     <div className="routine-container nighttime">
-      <div className="routine-image-nighttime">
-        <img src="/nighttime.png" alt="Nighttime Routine" />
-      </div>
       <div className="routine-text-nighttime">
-        <h2>Nighttime Routine</h2>
+        <h3>nighttime routine</h3>
         <ul>
           {products.length > 0 ? (
             products.map((product, index) => (

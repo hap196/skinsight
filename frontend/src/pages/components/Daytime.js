@@ -4,11 +4,8 @@ import "./Daytime.css";
 const Daytime = ({ products }) => {
   return (
     <div className="routine-container daytime">
-      <div className="routine-image-daytime">
-        <img src="/daytime.png" alt="Daytime Routine" />
-      </div>
       <div className="routine-text-daytime">
-        <h2>Daytime Routine</h2>
+        <h3>daytime routine</h3>
         <ul>
           {products.length > 0 ? (
             products.map((product, index) => (
