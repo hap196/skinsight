@@ -4,17 +4,15 @@ import { Row, Col, message, Carousel, Steps, Upload, Button, Spin } from "antd";
 import { CheckCircleOutlined, LeftOutlined, RightOutlined, UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Quiz.css";
-import dryImg from "../assets/buttons/scar.svg";
-import comboImg from "../assets/buttons/scar.svg";
-import oilyImg from "../assets/buttons/scar.svg";
-import poreImg from "../assets/buttons/scar.svg";
-import bumpyImg from "../assets/buttons/scar.svg";
-import blackheadImg from "../assets/buttons/scar.svg";
-import hyperImg from "../assets/buttons/scar.svg";
-import scarImg from "../assets/buttons/scar.svg";
-import sebumImg from "../assets/buttons/scar.svg";
-import sunImg from "../assets/buttons/scar.svg";
-import wrinkleImg from "../assets/buttons/scar.svg";
+import button1 from "../assets/buttons/button1.png";
+import button2 from "../assets/buttons/button2.png";
+import button3 from "../assets/buttons/button3.png";
+import button4 from "../assets/buttons/button4.png";
+import button5 from "../assets/buttons/button5.png";
+import button6 from "../assets/buttons/button6.png";
+import button7 from "../assets/buttons/button7.png";
+import button8 from "../assets/buttons/button8.png";
+import button9 from "../assets/buttons/button9.png";
 
 const SkinAIForm = () => {
   const [formData, setFormData] = useState({});
@@ -30,7 +28,6 @@ const SkinAIForm = () => {
   const carouselRef = React.useRef();
 
   const stepsData = [
-    { title: "Login" },
     { title: "Medical" },
     { title: "Lifestyle" },
     { title: "Upload Image" },
@@ -41,16 +38,33 @@ const SkinAIForm = () => {
       label: "What best describes your skin type?",
       options: ["DRY", "COMBINATION", "OILY"],
       multiple: false,
-      images: [dryImg, comboImg, oilyImg],
+      images: [button1, button2, button3],
     },
     {
-      label: "What are your skin concerns?",
+      label: "Do you have sensitive skin?",
+      options: ["YES", "NO", "DON'T KNOW"],
+      multiple: false,
+      images: [button1, button2, button3],
+    },
+    {
+      label: "What skin concerns would you like to target?",
       options: [
         "LARGE PORES", "WRINKLES", "SUNSPOTS", "BUMPY SKIN", "SEBACEOUS FILAMENTS",
         "HYPERPIGMENTATION", "BLACKHEADS", "ACNE SCARS", "FLAKY SKIN"
       ],
       images: [
-        poreImg, wrinkleImg, sunImg, bumpyImg, sebumImg, hyperImg, blackheadImg, scarImg, dryImg
+        button1, button2, button3, button4, button5, button6, button7, button8, button9
+      ],
+      multiple: true,
+    },
+    {
+      label: "Where are your skin concerns located?",
+      options: [
+        "T-ZONE", "CHEEKS", "CHIN", "NECK", "SHOULDERS",
+        "BACK", "CHEST", "ARMS/HANDS", "LEGS/FEET"
+      ],
+      images: [
+        button1, button2, button3, button4, button5, button6, button7, button8, button9
       ],
       multiple: true,
     },
@@ -60,20 +74,25 @@ const SkinAIForm = () => {
     {
       label: "Are you a morning bird or a night owl?",
       options: ["MORNING BIRD", "NIGHT OWL", "NEITHER"],
-      images: [dryImg, dryImg, dryImg],
+      images: [button1, button2, button3],
       multiple: false,
     },
     {
       label: "How many hours do you exercise per week?",
       options: ["0-2", "3-6", "7+"],
-      images: [dryImg, dryImg, dryImg],
+      images: [button1, button2, button3],
+      multiple: false,
+    },
+    {
+      label: "How many hours do you sleep each day?",
+      options: ["6 OR LESS", "7-8", "9-10"],
+      images: [button1, button2, button3],
       multiple: false,
     },
   ];
 
-  // Handle select for quiz options
   const handleSelect = (value) => {
-    const currentQuestions = currentStep === 1 ? medicalQuestions : lifestyleQuestions;
+    const currentQuestions = currentStep === 0 ? medicalQuestions : lifestyleQuestions;
     const currentQuestionData = currentQuestions[currentQuestion];
 
     const selectedValue = currentQuestionData.multiple
@@ -85,25 +104,22 @@ const SkinAIForm = () => {
     setFormData({ ...formData, [currentQuestionData.label]: selectedValue });
   };
 
-  // Handle file upload and store in state
   const handleImageUpload = ({ fileList }) => {
     if (fileList.length > 0) {
-      setFile(fileList[0].originFileObj); // Ensure file is properly set
-      setFileList(fileList); // Set the fileList
+      setFile(fileList[0].originFileObj);
+      setFileList(fileList);
       message.success("File uploaded successfully");
     } else {
-      setFile(null); // Reset if no file is present
+      setFile(null);
       setFileList([]);
     }
   };
 
-  // song generation after you finish lifestyle questions
   const generateSong = async () => {
     setIsGeneratingSong(true);
     setSongReady(false);
 
     try {
-      // send data to suno
       const response = await axios.post("http://127.0.0.1:5001/generate", {
         gpt_description_prompt: "A song based on your lifestyle",
         music_style: formData["Are you a morning bird or a night owl?"],
@@ -111,7 +127,6 @@ const SkinAIForm = () => {
 
       const { song_id } = response.data;
 
-      // Poll until the audio URL is ready
       const pollInterval = setInterval(async () => {
         const audioResponse = await axios.get(`http://127.0.0.1:5001/check_audio/${song_id}`);
         const { audio_url } = audioResponse.data;
@@ -120,10 +135,10 @@ const SkinAIForm = () => {
           clearInterval(pollInterval);
           setIsGeneratingSong(false);
           setSongReady(true);
-          setAudioUrl(audio_url); // store audio for results page
-          setCurrentStep(3);
+          setAudioUrl(audio_url);
+          setCurrentStep(2);
         }
-      }, 5000); // poll every 5 seconds to see if it generated
+      }, 5000);
     } catch (error) {
       console.error("Error generating song:", error);
       message.error("Error generating the song. Please try again.");
@@ -141,9 +156,9 @@ const SkinAIForm = () => {
     setIsLoading(true);
 
     const formDataToSend = new FormData();
-    formDataToSend.append("file", file); // Append the uploaded file
+    formDataToSend.append("file", file);
     for (const key in formData) {
-      formDataToSend.append(key, formData[key]); // Append quiz answers
+      formDataToSend.append(key, formData[key]);
     }
 
     try {
@@ -151,7 +166,6 @@ const SkinAIForm = () => {
       const prediction = response.data.predicted_disease_class;
       const gptResponse = response.data.skincare_recommendations;
 
-      // pass predictions and audio url to results page
       navigate("/results", { state: { prediction, gptResponse, audio_url: audioUrl } });
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -164,59 +178,59 @@ const SkinAIForm = () => {
     }
   };
 
-  // Handle next button click
   const handleNext = async () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    if (currentStep === 0) {
+    if (currentStep === 0 && currentQuestion < medicalQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      carouselRef.current.next();
+    } else if (currentStep === 0 && currentQuestion === medicalQuestions.length - 1) {
       setCurrentStep(1);
-    } else if (currentStep === 1 && currentQuestion < medicalQuestions.length - 1) {
+      setCurrentQuestion(0);
+    } else if (currentStep === 1 && currentQuestion < lifestyleQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       carouselRef.current.next();
-    } else if (currentStep === 1 && currentQuestion === medicalQuestions.length - 1) {
-      setCurrentStep(2);
-      setCurrentQuestion(0); // Reset question index for lifestyle
-    } else if (currentStep === 2 && currentQuestion < lifestyleQuestions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      carouselRef.current.next();
-    } else if (currentStep === 2 && currentQuestion === lifestyleQuestions.length - 1) {
-      // Trigger song generation after completing lifestyle questions
+    } else if (currentStep === 1 && currentQuestion === lifestyleQuestions.length - 1) {
       await generateSong();
     }
   };
 
-  // Handle back button click
   const handleBack = () => {
-    if (currentStep === 3) {
-      setCurrentStep(2); // Go back to lifestyle questions
-      setCurrentQuestion(lifestyleQuestions.length - 1); // Go to the last lifestyle question
+    if (currentStep === 2) {
+      setCurrentStep(1);
+      setCurrentQuestion(lifestyleQuestions.length - 1);
     } else if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
       carouselRef.current.prev();
     } else if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      if (currentStep === 2) {
+      if (currentStep === 1) {
         setCurrentQuestion(medicalQuestions.length - 1);
-      } else if (currentStep === 1) {
+      } else if (currentStep === 0) {
         setCurrentQuestion(0);
       }
     }
   };
 
-  // Render current step
   const renderStep = () => {
-    if (currentStep === 0) {
+    if (currentStep === 2) {
       return (
         <div className="form-content">
-          <h3 className="question-title">Login</h3>
-          <div>
-            <a className="nav-link" onClick={handleNext}>
-              Login
-            </a>
-            {" | "}
-            <a className="nav-link" onClick={handleNext}>
-              Skip
-            </a>
-          </div>
+          <h3 className="question-title">Upload an image of your skin concern</h3>
+          <Upload
+            fileList={fileList}
+            onChange={handleImageUpload}
+            listType="picture"
+            beforeUpload={() => false}
+          >
+            <Button icon={<UploadOutlined />}>Select Image</Button>
+          </Upload>
+          <Button
+            type="primary"
+            onClick={handleSubmit}
+            disabled={!file || isLoading}
+          >
+            {isLoading ? "Processing..." : "Submit"}
+          </Button>
         </div>
       );
     }
