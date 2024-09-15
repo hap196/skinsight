@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Predict from "./pages/Predict";
 import Quiz from "./components/Quiz";
-import Profile from "./pages/Profile";
-import Results from "./pages/Results"
+import Profile from "./pages/components/Profile";
+import Results from "./pages/Results";
+import Music from "./components/Music";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/music" element={<Music />} />
         </Routes>
       </div>
     </Router>

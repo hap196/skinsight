@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import Chat from "./components/Chat";
+import Chat from "./Chat";
 import axios from "axios";
-import './Profile.css';
+import "./Profile.css";
 import { Button, Typography, Layout, Space } from "antd";
-import { UpOutlined, LeftOutlined, EditOutlined } from '@ant-design/icons'; // Import Edit icon
+import { UpOutlined, LeftOutlined, EditOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 const { Sider, Content } = Layout;
 
-const Profile = () => {
+const Profile = ({ prediction }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false); // State to control sidebar collapse
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [assistantId, setAssistantId] = useState(null);
   const [messages, setMessages] = useState(() => {
     const savedMessages = sessionStorage.getItem("messages");
@@ -23,13 +23,11 @@ const Profile = () => {
   const [userName, setUserName] = useState("Guest");
   const hasInitializedRef = useRef(false);
 
-  // send cookies with requests
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
     if (!hasInitializedRef.current) {
       initChatBot();
-      // fetch user name
       fetchUserName();
       hasInitializedRef.current = true;
     }
@@ -49,7 +47,6 @@ const Profile = () => {
     }
   }, []);
 
-  // fetch the user's name from the backend
   const fetchUserName = async () => {
     try {
       const response = await axios.get("http://localhost:5001/profile");
@@ -62,7 +59,6 @@ const Profile = () => {
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.error("User not logged in:", error.response.data);
-        // redirect to login page if not logged in
         window.location.href = "http://localhost:5001/login";
       } else {
         console.error("Error fetching user name:", error.message);
@@ -102,118 +98,77 @@ const Profile = () => {
   }, [threadId]);
 
   return (
-    <Layout className="app-container" style={{ height: '100vh', backgroundColor: '#F3E4C7' }}>
-      {/* Collapsed arrow */}
+    <Layout className="app-container">
       {isCollapsed && (
         <Button
           type="text"
           onClick={toggleCollapse}
-          style={{
-            position: 'absolute',
-            top: '50px',
-            left: '0px',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: 'black',
-            display: 'flex',
-            alignItems: 'center',
-            transform: 'rotate(90deg)',
-            zIndex: 1000,
-          }}
+          className="collapsed-button"
         >
-          <UpOutlined style={{ marginRight: '5px' }} />
+          <UpOutlined style={{ marginRight: "5px" }} />
           View Profile
         </Button>
       )}
 
       <Sider
         width={300}
-        className="profile-sidebar"
+        className={`profile-sidebar ${isCollapsed ? "collapsed" : ""}`}
         collapsible
         collapsed={isCollapsed}
         collapsedWidth={0}
         trigger={null}
-        style={{
-          backgroundColor: '#F3E4C7',
-          color: 'black',
-          height: '100vh',
-          padding: '20px',
-          overflow: 'hidden',
-          transition: 'transform 0.3s ease',
-          transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
-        }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {/* Replace static text with the user's name */}
-          <Title level={3} style={{ color: 'black' }}>{userName}'s Profile</Title>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Title level={3} className="profile-sidebar-title">
+            {userName}'s Profile
+          </Title>
           <Button
             type="text"
             icon={isCollapsed ? <UpOutlined /> : <LeftOutlined />}
             shape="circle"
             onClick={toggleCollapse}
-            style={{
-              color: 'black',
-              fontSize: '16px',
-              borderRadius: '50%',
-              border: 'none',
-              color: 'black'
-            }}
+            className="edit-button"
           />
         </div>
         <Space direction="vertical">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
+          <div className="profile-section">
+            <Text className="profile-label">
               <strong>Skin Conditions:</strong>
             </Text>
-            <Button
-              type="text"
-              style={{ color: 'black' }}
-            />
+            <Button type="text" className="edit-button" />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              TODO: populate skin conditions
-            </Text>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
+          <div className="profile-text">{prediction}</div>
+          <div className="profile-section">
+            <Text className="profile-label">
               <strong>Skin Type:</strong>
             </Text>
             <Button
               type="text"
               icon={<EditOutlined />}
-              style={{ color: 'black' }}
+              className="edit-button"
             />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              TODO: populate skin type
-            </Text>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
+          <div className="profile-text">TODO: populate skin type</div>
+          <div className="profile-section">
+            <Text className="profile-label">
               <strong>Skin Concerns:</strong>
             </Text>
             <Button
               type="text"
               icon={<EditOutlined />}
-              style={{ color: 'black' }}
+              className="edit-button"
             />
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <Text style={{ color: 'black', marginRight: '10px' }}>
-              TODO: populate skin concerns
-            </Text>
-          </div>
+          <div className="profile-text">TODO: populate skin concerns</div>
         </Space>
-        <div className="chat-launcher" style={{ marginTop: "20px", textAlign: 'center' }}>
-        <Button className="brown-button" onClick={handleChatToggle}>
+        <div className="chat-launcher">
+          <Button className="brown-button" onClick={handleChatToggle}>
             Talk to our dermatology assistant
-        </Button>
+          </Button>
         </div>
       </Sider>
       <Layout>
-        <Content style={{ padding: '20px' }}>
+        <Content style={{ padding: "20px" }}>
           {isChatOpen && (
             <Chat
               handleClose={handleChatToggle}

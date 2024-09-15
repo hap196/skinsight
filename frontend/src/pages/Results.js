@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Results.css";
 import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
 import { useLocation } from "react-router-dom";
+import { Drawer } from "antd";
+import Profile from "./components/Profile";
 
 const Results = () => {
   // Get the passed prediction and recommendations from location state
@@ -22,9 +24,19 @@ const Results = () => {
   const ingredients = gptResponse?.ingredients || {}; // {ingredient: description}
   const morning = gptResponse?.morning || "";
   const night = gptResponse?.night || "";
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const showDrawer = () => {
+    setDrawerVisible(true);
+  };
+
+  const onCloseDrawer = () => {
+    setDrawerVisible(false);
+  };
 
   useEffect(() => {
     // Smooth scrolling function
+
     function smoothScroll(target, duration) {
       let start = window.pageXOffset; // Start position is the current horizontal scroll
       let distance = target - start;
@@ -111,6 +123,7 @@ const Results = () => {
 
   return (
     <div className="container">
+
       {/* <section className="section product-recommendations">
         <h2>Identified Skin Concerns</h2>
         <p>{prediction || "No skin concerns identified."}</p>
@@ -118,17 +131,33 @@ const Results = () => {
 
       {/* Product Recommendations Section */}
       <section className="section product-recommendations">
+      <button onClick={showDrawer} className="open-profile-button">
+        Open Profile
+      </button>
+
+      <Drawer
+        title="Profile"
+        placement="left"
+        closable={true}
+        onClose={onCloseDrawer}
+        open={drawerVisible}
+        width={400}
+      >
+        <Profile identifiedSkinCondition={prediction} />
+      </Drawer>
         <h2>Product Recommendations</h2>
         {Object.keys(ingredients).length > 0 ? (
           <ol>
-            {Object.entries(ingredients).map(([ingredient, description], index) => (
-              <li key={index}>
-                <strong>{ingredient}</strong>
-                <ul style={{ marginLeft: "20px" }}>
-                  <li>{description}</li>
-                </ul>
-              </li>
-            ))}
+            {Object.entries(ingredients).map(
+              ([ingredient, description], index) => (
+                <li key={index}>
+                  <strong>{ingredient}</strong>
+                  <ul style={{ marginLeft: "20px" }}>
+                    <li>{description}</li>
+                  </ul>
+                </li>
+              )
+            )}
           </ol>
         ) : (
           <p>No product recommendations available.</p>
@@ -137,8 +166,8 @@ const Results = () => {
 
       {/* Routines Section */}
       <section className="section routines">
-        <Daytime products={morning.split('.')} />
-        <Nighttime products={night.split('.')} />
+        <Daytime products={morning.split(".")} />
+        <Nighttime products={night.split(".")} />
       </section>
 
       <button className="scroll-arrow">&#8594;</button>
