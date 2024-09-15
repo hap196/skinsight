@@ -154,35 +154,18 @@ const Results = () => {
       </div>
 
       <section className="section product-recommendations">
-      <h2 className="greeting">Hi, {userName}!</h2>
-        <h2>Product Recommendations</h2>
-        {Object.keys(ingredients).length > 0 ? (
-          <ol>
-            {Object.entries(ingredients).map(
-              ([ingredient, description], index) => (
-                <li key={index}>
-                  <strong>{ingredient}</strong>
-                  <ul style={{ marginLeft: "20px" }}>
-                    <li>{description}</li>
-                  </ul>
-                </li>
-              )
-            )}
-          </ol>
-        ) : (
-          <p>No product recommendations available.</p>
-        )}
-        {/* Audio Player */}
-        {audio_url ? (
-          <div className="song-controls">
-            <audio id="background-audio" controls autoPlay loop>
-              <source src={audio_url} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          </div>
-        ) : (
-          <p>Sorry, no audio is available yet.</p>
-        )}
+        <h3 className="greeting">hi, {userName.toLowerCase()}!</h3>
+        <h3>here are your skincare recommendations:</h3>
+        <ul className="ingredients-list">
+          {Object.entries(ingredients).map(([ingredient, description], index) => (
+            <li className="ingredient-item" key={index}>
+              <div className="ingredient-content">
+                <div className="ingredient-front">{ingredient}</div>
+                <div className="ingredient-back">{description}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="section routines">
@@ -203,6 +186,16 @@ const Results = () => {
           </ol>
         </div>
       </section>
+
+      {/* Audio Player positioned at the bottom right */}
+      {audio_url && (
+        <div className="audio-player-container">
+          <audio id="background-audio" controls autoPlay loop>
+            <source src={audio_url} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      )}
 
       <div className="chat-launcher">
         <Button className="brown-button" onClick={handleChatToggle}>

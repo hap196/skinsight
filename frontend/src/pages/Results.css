@@ -29,8 +29,7 @@ html {
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
-  transition: transform 0.3s ease; /* Smooth transition when shifting */
-
+  transition: transform 0.3s ease;
 }
 
 .section {
@@ -64,6 +63,25 @@ html {
   font-weight: 300;
 }
 
+.container .greeting {
+  position: absolute;
+  top: 5%;
+  left: 40%;
+  font-family: "CustomFont", sans-serif;
+  font-weight: lighter;
+  color: black;
+  font-size: 1.5rem;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.ingredients-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
+}
+
 .routines {
   display: flex;
   flex-direction: column;
@@ -74,17 +92,82 @@ html {
 .daytime-container,
 .nighttime-container {
   position: absolute;
-  width: 50%;
+  font-size: 1.6rem;
 }
 
 .daytime-container {
-  top: 0;
-  left: 10%;
+  top: 10%;
+  left: 5%;
 }
 
 .nighttime-container {
-  top: 40%;
-  right: 0%;
+  bottom: 10%;
+  right: 5%;
+}
+
+
+.ingredient-item {
+  width: 250px;
+  height: 250px;
+  margin: 30px;
+  position: relative;
+  perspective: 1000px;
+}
+
+.ingredient-content {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1rem;
+  background-color: #473621;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.6s ease-out;
+  transform-style: preserve-3d;
+  position: relative;
+  box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.5);
+}
+
+.ingredient-content:hover {
+  transform: rotateY(180deg);
+}
+
+.ingredient-front,
+.ingredient-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  backface-visibility: hidden;
+}
+
+.ingredient-item:hover .ingredient-content {
+  transform: rotateY(180deg);
+}
+
+.ingredient-front {
+  background-color: var(--norm-brown);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+  font-weight: bolder;
+}
+
+.ingredient-back {
+  background-color: var(--light-brown);
+  color: black;
+  transform: rotateY(180deg);
+  padding: 10px;
+  font-size: larger;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes float {
@@ -169,10 +252,58 @@ html {
 }
 
 .brown-button {
-  background-color: #8B4513;
+  background-color: var(--norm-brown);
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   font-family: "OtherFont", sans-serif;
+}
+
+.audio-player-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1001;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar styling for WebKit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  background: transparent; /* Transparent background */
+}
+
+/* Track (the area of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: transparent; /* Transparent track */
+}
+
+/* Handle (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent handle */
+  border-radius: 6px; /* Rounded corners for the handle */
+}
+
+/* Handle hover effect */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.7); /* Darker on hover */
+}
+
+/* Scrollbar for Firefox */
+html {
+  scrollbar-width: thin; /* Make scrollbar thin */
+  scrollbar-color: rgba(0, 0, 0, 0.5) transparent; /* Transparent background and semi-transparent handle */
+}
+
+/* Scrollbar for Internet Explorer and Edge */
+body {
+  -ms-overflow-style: none; /* Hides default scrollbar in IE and Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Hides default scrollbar for WebKit browsers */
 }
