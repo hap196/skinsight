@@ -43,19 +43,23 @@ body {
 }
 
 .option-circle {
+  height: 260px;
+  width: 260px;
   border-radius: 50%;
   transition: all 0.3s ease;
   cursor: pointer;
   margin: 0 12px;
-  transition: transform 0.2s;
+  box-sizing: border-box; /* Include border in the element's total width and height */
 }
 
-.option-circle:hover {
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Add shadow on hover */
+.option-circle img {
+  height: 100%; /* Scale the image to fit the circle */
+  width: 100%;
 }
 
 .option-circle.selected {
   border: 3px solid white;
+  box-sizing: border-box; /* Ensure the border is included in the circle's dimensions */
 }
 
 .option-text {
@@ -72,7 +76,7 @@ body {
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust to center */
   word-break: break-word; /* Break text if too long */
-}
+} 
 
 .option-text:hover {
   cursor: pointer;
