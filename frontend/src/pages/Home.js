@@ -25,7 +25,7 @@ const Home = () => {
       </section>
       <section className="section2">
         <h2>skincare recommendations</h2>
-        <h4>Powered with AI</h4>
+        <h4>powered with AI</h4>
         <p>We use an AI model trained on dermatology datasets to identify your skin conditions in real time.
           Complete a quiz and upload a photo of your skin to receive personalized skincare recommendations.
         </p>
