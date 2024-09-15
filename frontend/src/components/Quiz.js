@@ -21,16 +21,20 @@ const SkinAIForm = () => {
 
   const stepsData = [
     { title: "Login" },
-    { title: "Questions" },
+    { title: "Medical Questions" },
+    { title: "Lifestyle Questions" },
     { title: "Upload Image" },
   ];
 
   const questions = [
     {
       label: "What best describes your skin type?",
-      options: ["Oily", "Combination", "Dry"],
+      options: ["Dry", "Combination", "Oily"],
       multiple: false,
-      icons: [<FrownOutlined />, <MehOutlined />, <SmileOutlined />],
+      images: ["../assets/buttons/dry.svg",
+        "../assets/buttons/combo.svg",
+        "../assets/buttons/oily.svg",
+      ],
     },
     {
       label: "What are your skin concerns?",
@@ -44,13 +48,25 @@ const SkinAIForm = () => {
         "Blackheads",
         "Acne scars",
         "Flaky skin",
+        "Excess oil",
+      ],
+      images: ["../assets/buttons/pores.svg",
+        "../assets/buttons/wrinkle.svg",
+        "../assets/buttons/sun.svg",
+        "../assets/buttons/bumpy.svg",
+        "../assets/buttons/sebum.svg",
+        "../assets/buttons/hyper.svg",
+        "../assets/buttons/blackhead.svg",
+        "../assets/buttons/scar.svg",
+        "../assets/buttons/dry.svg",
+        "../assets/buttons/oily.svg",
       ],
       multiple: true,
     },
     {
       label: "Do you have sensitive skin?",
       options: ["Yes", "No", "I don’t know"],
-      icons: [<CheckCircleOutlined />, <FrownOutlined />, <MehOutlined />],
+      multiple: false,
     },
     {
       label: "Where is your main concern?",
@@ -58,12 +74,30 @@ const SkinAIForm = () => {
         "Cheeks",
         "Forehead",
         "Arms/Hands",
-        "Leg/Feet",
+        "Legs/Feet",
         "Back",
         "Chest",
         "Neck",
-        "Multiple locations",
       ],
+      multiple: true,
+    },
+    {
+      label: "What medications and skin products are you currently using?",
+    },
+    {
+      label: "Are you a morning bird or a night owl?",
+      options: ["Morning bird", "Night owl", "Neither"],
+      multiple: false,
+    },
+    {
+      label: "How many hours do you exercise per week?",
+      options: ["0-2", "3-5", "5-7", "7+"],
+      multiple: false,
+    },
+    {
+      label: "How many hours of sleep do you typically get each night?",
+      options: ["Less than 6", "6-7", "8-9", "10+"],
+      multiple: false,
     },
   ];
 
@@ -173,14 +207,17 @@ const SkinAIForm = () => {
                           }`}
                           onClick={() => handleSelect(option)}
                         >
-                          <p>{option}</p>
+                          <img src={question.images[idx]} alt={option} /> {/* Image display */}
                         </div>
+                        <p>{option}</p> {/* Text label below the image */}
                       </Col>
                     ))}
                   </Row>
                 </div>
               ))}
             </Carousel>
+
+
             <div className="navigation-buttons">
               <a className="nav-link" onClick={handleBack}>
                 Back
@@ -194,7 +231,7 @@ const SkinAIForm = () => {
       case 2:
         return (
           <div className="form-content">
-            <h3>Upload a clear image of your skin</h3>
+            <h3>Upload a high resolution image of your skin</h3>
             <Upload
               listType="picture"
               fileList={fileList}
