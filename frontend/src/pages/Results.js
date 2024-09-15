@@ -3,7 +3,8 @@ import "./Results.css";
 import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
 import { useLocation } from "react-router-dom";
-import starImg1 from "../assets/star.svg"
+import starImg1 from "../assets/star.svg";
+import Profile from "./Profile";
 
 const Results = () => {
   const location = useLocation();
@@ -21,14 +22,10 @@ const Results = () => {
   const ingredients = gptResponse?.ingredients || {};
   const morning = gptResponse?.morning || "";
   const night = gptResponse?.night || "";
-  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(true); // Default to closed
 
-  const showDrawer = () => {
-    setDrawerVisible(true);
-  };
-
-  const onCloseDrawer = () => {
-    setDrawerVisible(false);
+  const toggleProfile = () => {
+    setIsProfileOpen(!isProfileOpen);
   };
 
   useEffect(() => {
@@ -65,11 +62,18 @@ const Results = () => {
     window.addEventListener("wheel", handleScroll, { passive: false });
 
     const handleGradientUpdate = () => {
-      const scrollPercentage = window.pageXOffset / (document.documentElement.scrollWidth - window.innerWidth);
-      const beigeToBlue = `linear-gradient(135deg, hsl(${40 + scrollPercentage * 80}, 70%, 90%), hsl(${200 - scrollPercentage * 100}, 100%, 85%))`;
-      const blueToNight = `linear-gradient(135deg, hsl(${200 - scrollPercentage * 100}, 85%, 85%), hsl(${270 - scrollPercentage * 70}, 60%, 30%))`;
+      const scrollPercentage =
+        window.pageXOffset /
+        (document.documentElement.scrollWidth - window.innerWidth);
+      const beigeToBlue = `linear-gradient(135deg, hsl(${
+        40 + scrollPercentage * 80
+      }, 70%, 90%), hsl(${200 - scrollPercentage * 100}, 100%, 85%))`;
+      const blueToNight = `linear-gradient(135deg, hsl(${
+        200 - scrollPercentage * 100
+      }, 85%, 85%), hsl(${270 - scrollPercentage * 70}, 60%, 30%))`;
 
-      document.body.style.background = scrollPercentage < 0.5 ? beigeToBlue : blueToNight;
+      document.body.style.background =
+        scrollPercentage < 0.5 ? beigeToBlue : blueToNight;
     };
 
     window.addEventListener("scroll", handleGradientUpdate);
@@ -81,21 +85,28 @@ const Results = () => {
   }, []);
 
   const starImages = [
-    { src: starImg1, left: '5%', top: '20%' },
-    { src: starImg1, left: '20%', top: '70%' },
-    { src: starImg1, left: '50%', top: '5%' },
-    { src: starImg1, left: '70%', top: '55%' },
-    { src: starImg1, left: '90%', top: '20%' },
-    { src: starImg1, left: '110%', top: '70%' },
-    { src: starImg1, left: '120%', top: '0%' },
-    { src: starImg1, left: '140%', top: '20%' },
-    { src: starImg1, left: '185%', top: '50%' },
-    { src: starImg1, left: '170%', top: '10%' },
-    { src: starImg1, left: '160%', top: '80%' },
+    { src: starImg1, left: "5%", top: "20%" },
+    { src: starImg1, left: "20%", top: "70%" },
+    { src: starImg1, left: "50%", top: "5%" },
+    { src: starImg1, left: "70%", top: "55%" },
+    { src: starImg1, left: "90%", top: "20%" },
+    { src: starImg1, left: "110%", top: "70%" },
+    { src: starImg1, left: "120%", top: "0%" },
+    { src: starImg1, left: "140%", top: "20%" },
+    { src: starImg1, left: "185%", top: "50%" },
+    { src: starImg1, left: "170%", top: "10%" },
+    { src: starImg1, left: "160%", top: "80%" },
   ];
 
   return (
-    <div className="container">
+    <div className={`container ${isProfileOpen ? "profile-open" : ""}`}>
+      <Profile
+        identifiedSkinCondition={prediction}
+        skinConcerns={gptResponse?.skin_concerns}
+        isCollapsed={!isProfileOpen}
+        toggleCollapse={toggleProfile}
+      />
+
       <div className="floating-images">
         {starImages.map((image, index) => (
           <img
@@ -107,21 +118,11 @@ const Results = () => {
           />
         ))}
       </div>
-      <section className="section product-recommendations">
-        <button onClick={showDrawer} className="open-profile-button">
-          Open Profile
-        </button>
+      <button onClick={toggleProfile} className="open-profile-button">
+        {isProfileOpen ? "Close Profile" : "Open Profile"}
+      </button>
 
-        <Drawer
-          title="Profile"
-          placement="left"
-          closable={true}
-          onClose={onCloseDrawer}
-          open={drawerVisible}
-          width={400}
-        >
-          <Profile identifiedSkinCondition={prediction} />
-        </Drawer>
+      <section className="section product-recommendations">
         <h2>Product Recommendations</h2>
         {Object.keys(ingredients).length > 0 ? (
           <ol>
@@ -143,10 +144,10 @@ const Results = () => {
 
       <section className="section routines">
         <div className="daytime-container">
-          <Daytime products={morning.split('.')} />
+          <Daytime products={morning.split(".")} />
         </div>
         <div className="nighttime-container">
-          <Nighttime products={night.split('.')} />
+          <Nighttime products={night.split(".")} />
         </div>
       </section>
     </div>

@@ -1,11 +1,11 @@
 @font-face {
-  font-family: 'CustomFont';
-  src: url('../assets/tan-mon-cheri.ttf') format('truetype');
+  font-family: "CustomFont";
+  src: url("../assets/tan-mon-cheri.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'OtherFont';
-  src: url('../assets/HankenGrotesk.ttf') format('truetype');
+  font-family: "OtherFont";
+  src: url("../assets/HankenGrotesk.ttf") format("truetype");
 }
 
 body,
@@ -26,8 +26,11 @@ html {
     #8dcde2 70%,
     #333e85 100%
   );
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
+  transition: transform 0.3s ease; /* Smooth transition when shifting */
+
 }
 
 .section {
@@ -40,20 +43,12 @@ html {
   scroll-snap-align: start;
   padding: 2rem;
   box-sizing: border-box;
-  min-width: 100vw; /* Make each section take up full viewport width */
+  min-width: 100vw;
 }
 
-.section h2 {
-  font-family: 'CustomFont', sans-serif;
-  font-weight: lighter;
-  color: black;
-  font-size: 2.5rem;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-  letter-spacing: 3px;
-}
-
+.section h2,
 .section h3 {
-  font-family: 'CustomFont', sans-serif;
+  font-family: "CustomFont", sans-serif;
   font-weight: lighter;
   color: black;
   font-size: 2.5rem;
@@ -62,15 +57,13 @@ html {
 }
 
 .section p {
-  font-family: 'OtherFont', sans-serif;
+  font-family: "OtherFont", sans-serif;
   color: black;
   font-size: 1.2rem;
   letter-spacing: 2px;
   font-weight: 300;
-
 }
 
-/* Routines */
 .routines {
   display: flex;
   flex-direction: column;
@@ -78,63 +71,25 @@ html {
   width: 100vw;
 }
 
-.daytime-container {
+.daytime-container,
+.nighttime-container {
   position: absolute;
+  width: 50%;
+}
+
+.daytime-container {
   top: 0;
-  left: 10%; /* Adjust this value as needed */
-  width: 50%; /* Adjust this value to control width */
+  left: 10%;
 }
 
 .nighttime-container {
-  position: absolute;
-  bottom: 0;
   top: 40%;
-  right: -40%; /* Adjust this value as needed */
-  width: 80%; /* Adjust this value to control width */
-}
-
-h2 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-}
-
-textarea {
-  width: 80%;
-  height: 200px;
-  padding: 1rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: none;
-  resize: none;
+  right: 10%;
 }
 
 @keyframes float {
   0%,
   100% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(10px, 10px);
-  }
-  50% {
-    transform: translate(-5px, 15px);
-  }
-  75% {
-    transform: translate(-15px, -10px);
-  }
-}
-
-.floating-image {
-  position: absolute;
-  width: 200px;
-  height: auto;
-  pointer-events: none;
-  opacity: 0.7;
-  animation: float 15s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
     transform: translate(0, 0);
   }
   25% {
@@ -148,16 +103,60 @@ textarea {
   }
 }
 
-/* Specific styles for individual floating images */
+.floating-image {
+  position: absolute;
+  width: 200px;
+  height: auto;
+  pointer-events: none;
+  opacity: 0.7;
+  animation: float 15s ease-in-out infinite;
+}
+
 .floating-image:nth-child(2n) {
   animation-duration: 20s;
 }
-
 .floating-image:nth-child(3n) {
   animation-duration: 25s;
 }
-
 .floating-image:nth-child(4n) {
   animation-duration: 20s;
-  animation: float 15s ease-in-out infinite,
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 0;
+  transition: margin-left 0.3s ease; /* Smooth transition for margin-left */
+}
+
+.profile-open .main-content {
+  margin-left: 300px; /* Shift right by 300px when profile is open */
+}
+
+.profile-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 300px;
+  background-color: #f0f0f0;
+  transform: translateX(-100%); /* Initially hidden */
+  transition: transform 0.3s ease; /* Smooth transition for sliding */
+  z-index: 1000;
+}
+
+.profile-sidebar:not(.collapsed) {
+  transform: translateX(0); /* Slide in when not collapsed */
+}
+
+.open-profile-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "OtherFont", sans-serif;
+  z-index: 1001;
 }
