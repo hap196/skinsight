@@ -158,8 +158,14 @@ const Results = () => {
 
   const ingredients = gptResponse?.ingredients || {};
   // filter out empty steps
-  const morning = gptResponse?.morning?.split(".").filter((step) => step.trim() !== "") || [];
-  const night = gptResponse?.night?.split(".").filter((step) => step.trim() !== "") || [];
+  const morning = gptResponse?.morning
+  ?.split(".")
+  .filter((step) => step.trim() !== "" && step.trim().length >= 10) || [];
+
+const night = gptResponse?.night
+  ?.split(".")
+  .filter((step) => step.trim() !== "" && step.trim().length >= 10) || [];
+
 
   useEffect(() => {
     const smoothScroll = (target, duration) => {
