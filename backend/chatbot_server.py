@@ -30,7 +30,7 @@ def remove_source(text):
 def get_assistant():
     global assistant_id
     data = json.loads(request.data)
-    context = data.get('context')
+    context = data.get('context', '')  # Default to an empty string if context is not provided
     thread_id = data.get('threadId')
     try:
         assistant_id = 'asst_A3YGhsDgqZdYk85UyXsRiX6s'

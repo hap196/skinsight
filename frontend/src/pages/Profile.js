@@ -80,19 +80,18 @@ const Profile = ({
     }
   };
 
-  const fetchAssistant = async () => {
+  const initChatBot = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/get_assistant");
-      return response.data;
+      const response = await axios.post("http://localhost:5000/get_assistant", {
+        context: `The user as the following information. Skin condition: ${identifiedSkinCondition}. Skin concerns: ${skinConcerns}.`,
+      });
+      setAssistantId(response.data?.assistant_id || null);
+      setThreadId(response.data?.threadId || "");
     } catch (error) {
-      console.error("Error fetching assistant:", error);
+      console.error("Error initializing chatbot:", error);
     }
   };
-
-  const initChatBot = async () => {
-    const data = await fetchAssistant();
-    setAssistantId(data?.assistant_id || null);
-  };
+  
 
   useEffect(() => {
     sessionStorage.setItem("messages", JSON.stringify(messages));

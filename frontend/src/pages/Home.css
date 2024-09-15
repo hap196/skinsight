@@ -12,10 +12,12 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'OtherFont', sans-serif;
+    scroll-behavior: smooth;
 }
 
 .home {
     text-align: center;
+    background-color: #f0f0f0;
 }
 
 .section1 {
