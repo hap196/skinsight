@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Chat from "./Chat";
+import Chat from "./components/Chat";
 import axios from "axios";
 import "./Profile.css";
 import { Button, Typography, Layout, Space } from "antd";
@@ -21,6 +21,17 @@ const Profile = ({ prediction }) => {
     return savedThread ? JSON.parse(savedThread) : "";
   });
   const [userName, setUserName] = useState("Guest");
+  const question_labels = [
+    "What are your skin concerns?",
+    "Do you have sensitive skin?",
+    "Where is your main concern?",
+  ];
+  const [userAttributes, setUserAttributes] = useState(
+    question_labels.reduce((acc, label) => {
+      acc[label] = null;
+      return acc;
+    }, {})
+  );
   const hasInitializedRef = useRef(false);
 
   axios.defaults.withCredentials = true;
@@ -28,7 +39,8 @@ const Profile = ({ prediction }) => {
   useEffect(() => {
     if (!hasInitializedRef.current) {
       initChatBot();
-      fetchUserName();
+      // fetch user attributes
+      fetchUserAttributes();
       hasInitializedRef.current = true;
     }
     if (messages.length === 0) {
@@ -47,7 +59,8 @@ const Profile = ({ prediction }) => {
     }
   }, []);
 
-  const fetchUserName = async () => {
+  // fetch the user's attributes from the backend
+  const fetchUserAttributes = async () => {
     try {
       const response = await axios.get("http://localhost:5001/profile");
       if (response.data.name) {
@@ -56,12 +69,15 @@ const Profile = ({ prediction }) => {
         console.log("User is not logged in:", response.data.error);
         setUserName("Guest");
       }
+      if (response.data.quiz_attributes) {
+        setUserAttributes(response.data.quiz_attributes);
+      }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.error("User not logged in:", error.response.data);
         window.location.href = "http://localhost:5001/login";
       } else {
-        console.error("Error fetching user name:", error.message);
+        console.error("Error fetching user attributes:", error.message);
       }
     }
   };
@@ -137,9 +153,13 @@ const Profile = ({ prediction }) => {
             </Text>
             <Button type="text" className="edit-button" />
           </div>
-          <div className="profile-text">{prediction}</div>
-          <div className="profile-section">
-            <Text className="profile-label">
+          <div style={{ marginBottom: "10px" }}>
+            <Text style={{ color: "black", marginRight: "10px" }}>
+              TODO: skin conditions
+            </Text>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Text style={{ color: "black", marginRight: "10px" }}>
               <strong>Skin Type:</strong>
             </Text>
             <Button
@@ -148,9 +168,14 @@ const Profile = ({ prediction }) => {
               className="edit-button"
             />
           </div>
-          <div className="profile-text">TODO: populate skin type</div>
-          <div className="profile-section">
-            <Text className="profile-label">
+          <div style={{ marginBottom: "10px" }}>
+            <Text style={{ color: "black", marginRight: "10px" }}>
+              {userAttributes["What is your skin type?"] ||
+                "No skin type inputted."}
+            </Text>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Text style={{ color: "black", marginRight: "10px" }}>
               <strong>Skin Concerns:</strong>
             </Text>
             <Button
@@ -159,7 +184,12 @@ const Profile = ({ prediction }) => {
               className="edit-button"
             />
           </div>
-          <div className="profile-text">TODO: populate skin concerns</div>
+          <div style={{ marginBottom: "10px" }}>
+            <Text style={{ color: "black", marginRight: "10px" }}>
+              {userAttributes["What are your skin concerns?"] ||
+                "No skin concerns inputted."}
+            </Text>
+          </div>
         </Space>
         <div className="chat-launcher">
           <Button className="brown-button" onClick={handleChatToggle}>

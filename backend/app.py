@@ -86,9 +86,12 @@ def logout():
     session.pop("user", None)
     return redirect("/")
 
-
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
+    # when user finishes form again
+    if request.method == "POST":
+        session["user"]["quiz_attributes"] = {key: request.form.get(key) for key in request.form if key != 'file'}
+
     user = session.get("user")
     if user:
         response = jsonify(user)
@@ -98,6 +101,7 @@ def profile():
     # Add necessary CORS headers to allow credentials
     response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
     response.headers.add("Access-Control-Allow-Credentials", "true")
+    
     return response
 
 
@@ -120,7 +124,7 @@ def preprocess_image(img, target_size):
 
 # function to prompt and get a response from gpt (later to be replaced with a live chatbot)
 def get_skincare_recs(predicted_disease, conditions_dict):
-    prompt = f'I have been diagnosed with {predicted_disease}. You provide ingredient recommendations for skincare. You are given information about a person\'s skin conditions (e.g. acne, eczema, psoriasis, rosacea), skin type (dry, combination, or oily), skin concerns the person wants to address (large pores, wrinkles, sun spots, bumpy skin, sebaceous filaments, hyperpigmentation, blackheads, acne scars, flaky skin), and if the person has sensitive skin. Here is that data: {conditions_dict}. Based on this information, only return the information in the JSON format seen at the end. Provide a bulleted list of skincare ingredients that would help the person address their needs; add it to the "ingredients" key. Keep the list under 8 ingredients. Make sure all the ingredients can be used together (they do not react with each other or they are not too strong together). Do not recommend brands. Next, provide a 2-3 sentence description about each ingredient; add it to the "ingredient_descriptions" key. Keep the terminology simple enough for a middle schooler to understand. Next, suggest a short skincare routine (morning and night) using the ingredients you recommended. Each step should be a single full sentence with no line breaks, and DO NOT number them. Also, DO NOT add line breaks after them. Add the morning routine to the "morning" key and the night routine to the "night" key. JSON object: {{"ingredients": dictionary of (key, value) pairs being (name, description and how it addresses the conditions), "morning": first step. then next step. then third step. "", "night": "", }} DO NOT INCLUDE ANY EXTRA QUOTATIONS OR ANYTHING FOR THE JSON OBJECT SO THAT IT IS CONVERTABLE WITH JSON.PARSE.'
+    prompt = f'I have been diagnosed with {predicted_disease}. You provide ingredient recommendations for skincare. You are given information about a person\'s skin conditions (e.g. acne, eczema, psoriasis, rosacea), skin type (dry, combination, or oily), skin concerns the person wants to address (large pores, wrinkles, sun spots, bumpy skin, sebaceous filaments, hyperpigmentation, blackheads, acne scars, flaky skin), if the person has sensitive skin, and other lifestyle details. Here is that data: {conditions_dict}. Based on this information, only return the information in the JSON format seen at the end. Provide a bulleted list of skincare ingredients that would help the person address their needs; add it to the "ingredients" key. Keep the list under 8 ingredients. Make sure all the ingredients can be used together (they do not react with each other or they are not too strong together). Do not recommend brands. Next, provide a 2-3 sentence description about each ingredient; add it to the "ingredient_descriptions" key. Keep the terminology simple enough for a middle schooler to understand. Next, suggest a short skincare routine (morning and night) using the ingredients you recommended. Each step should be a single full sentence with no line breaks, and DO NOT number them. Also, DO NOT add line breaks after them. Add the morning routine to the "morning" key and the night routine to the "night" key. JSON object: {{"ingredients": dictionary of (key, value) pairs being (name, description and how it addresses the conditions), "morning": first step. then next step. then third step. "", "night": "", }} DO NOT INCLUDE ANY EXTRA QUOTATIONS OR ANYTHING FOR THE JSON OBJECT SO THAT IT IS CONVERTABLE WITH JSON.PARSE.'
 
     try:
         response = client.chat.completions.create(

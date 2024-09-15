@@ -4,7 +4,7 @@ import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
 import { useLocation } from "react-router-dom";
 import { Drawer } from "antd";
-import Profile from "./components/Profile";
+import Profile from "./Profile";
 
 const Results = () => {
   // Get the passed prediction and recommendations from location state
@@ -123,7 +123,6 @@ const Results = () => {
 
   return (
     <div className="container">
-
       {/* <section className="section product-recommendations">
         <h2>Identified Skin Concerns</h2>
         <p>{prediction || "No skin concerns identified."}</p>
@@ -131,20 +130,20 @@ const Results = () => {
 
       {/* Product Recommendations Section */}
       <section className="section product-recommendations">
-      <button onClick={showDrawer} className="open-profile-button">
-        Open Profile
-      </button>
+        <button onClick={showDrawer} className="open-profile-button">
+          Open Profile
+        </button>
 
-      <Drawer
-        title="Profile"
-        placement="left"
-        closable={true}
-        onClose={onCloseDrawer}
-        open={drawerVisible}
-        width={400}
-      >
-        <Profile identifiedSkinCondition={prediction} />
-      </Drawer>
+        <Drawer
+          title="Profile"
+          placement="left"
+          closable={true}
+          onClose={onCloseDrawer}
+          open={drawerVisible}
+          width={400}
+        >
+          <Profile identifiedSkinCondition={prediction} />
+        </Drawer>
         <h2>Product Recommendations</h2>
         {Object.keys(ingredients).length > 0 ? (
           <ol>
