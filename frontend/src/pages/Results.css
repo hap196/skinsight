@@ -160,3 +160,19 @@ html {
   font-family: "OtherFont", sans-serif;
   z-index: 1001;
 }
+
+.chat-launcher {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1001;
+}
+
+.brown-button {
+  background-color: #8B4513;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "OtherFont", sans-serif;
+}
