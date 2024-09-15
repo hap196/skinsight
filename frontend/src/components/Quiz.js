@@ -16,17 +16,13 @@ import sebumImg from "../assets/buttons/sebum.svg";
 import sunImg from "../assets/buttons/sun.svg";
 import wrinkleImg from "../assets/buttons/wrinkle.svg";
 
-const handleLogin = () => {
-  window.location.href = "http://localhost:5001/login";
-};
-
 const SkinAIForm = () => {
   const [formData, setFormData] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
-  const [file, setFile] = useState(null);
-  const [fileList, setFileList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState(null); // Store file here
+  const [fileList, setFileList] = useState([]); // Store file list
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const navigate = useNavigate();
   const carouselRef = React.useRef();
 
@@ -55,23 +51,8 @@ const SkinAIForm = () => {
       ],
       multiple: true,
     },
-    {
-      label: "Do you have sensitive skin?",
-      options: ["YES", "NO", "DON'T KNOW"],
-      images: [dryImg, dryImg, dryImg],
-      multiple: false,
-    },
-    {
-      label: "Where is your main concern?",
-      options: [
-        "CHEEKS", "T-ZONE", "CHIN", "ARMS/HANDS", "LEGS/FEET", "NECK",
-        "SHOULDERS", "BACK", "CHEST"
-      ],
-      images: [dryImg, dryImg, dryImg, dryImg, dryImg, dryImg, dryImg, dryImg, dryImg],
-      multiple: true,
-    },
   ];
-  
+
   const lifestyleQuestions = [
     {
       label: "Are you a morning bird or a night owl?",
@@ -85,14 +66,9 @@ const SkinAIForm = () => {
       images: [dryImg, dryImg, dryImg],
       multiple: false,
     },
-    {
-      label: "How many hours of sleep do you typically get each night?",
-      options: ["6 OR LESS", "7-8", "9-10"],
-      images: [dryImg, dryImg, dryImg, dryImg],
-      multiple: false,
-    },
-  ];  
+  ];
 
+  // Handle select for quiz options
   const handleSelect = (value) => {
     const currentQuestions = currentStep === 1 ? medicalQuestions : lifestyleQuestions;
     const currentQuestionData = currentQuestions[currentQuestion];
@@ -106,9 +82,56 @@ const SkinAIForm = () => {
     setFormData({ ...formData, [currentQuestionData.label]: selectedValue });
   };
 
+  // Handle file upload and store in state
+  const handleImageUpload = ({ fileList }) => {
+    // Always set the first file uploaded
+    if (fileList.length > 0) {
+      setFile(fileList[0].originFileObj); // Ensure file is properly set
+      setFileList(fileList); // Set the fileList
+      message.success("File uploaded successfully");
+    } else {
+      setFile(null); // Reset if no file is present
+      setFileList([]);
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!file) {
+      message.error("Please upload a file before submitting.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("file", file); // Append the uploaded file
+    for (const key in formData) {
+      formDataToSend.append(key, formData[key]); // Append quiz answers
+    }
+
+    try {
+      const response = await axios.post("http://127.0.0.1:5001/predict", formDataToSend);
+      const prediction = response.data.predicted_disease_class;
+      const gptResponse = response.data.skincare_recommendations;
+
+      // Pass predictions to results page then redirect
+      navigate("/results", { state: { prediction, gptResponse } });
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle next button click
   const handleNext = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-
     if (currentStep === 0) {
       setCurrentStep(1);
     } else if (currentStep === 1 && currentQuestion < medicalQuestions.length - 1) {
@@ -125,6 +148,7 @@ const SkinAIForm = () => {
     }
   };
 
+  // Handle back button click
   const handleBack = () => {
     if (currentStep === 3) {
       setCurrentStep(2); // Go back to lifestyle questions
@@ -142,10 +166,7 @@ const SkinAIForm = () => {
     }
   };
 
-  const handleUpload = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-  };
-
+  // Render current step
   const renderStep = () => {
     if (currentStep === 0) {
       return (
@@ -170,12 +191,19 @@ const SkinAIForm = () => {
           <h3 className="question-title">Upload an image of your skin concern</h3>
           <Upload
             fileList={fileList}
-            onChange={handleUpload}
+            onChange={handleImageUpload}
             listType="picture"
             beforeUpload={() => false}
           >
             <Button icon={<UploadOutlined />}>Select Image</Button>
           </Upload>
+          <Button
+            type="primary"
+            onClick={handleSubmit}
+            disabled={!file || isLoading} // Enable submit button only if a file is uploaded
+          >
+            {isLoading ? "Processing..." : "Submit"}
+          </Button>
         </div>
       );
     }

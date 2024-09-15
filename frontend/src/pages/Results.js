@@ -1,9 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Results.css";
 import Daytime from "./components/Daytime";
 import Nighttime from "./components/Nighttime";
 import { useLocation } from "react-router-dom";
+<<<<<<< HEAD
 import starImg1 from "../assets/star.svg"
+=======
+import { Drawer } from "antd";
+import Profile from "./Profile";
+>>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
 
 const Results = () => {
   const location = useLocation();
@@ -21,10 +26,26 @@ const Results = () => {
   const ingredients = gptResponse?.ingredients || {};
   const morning = gptResponse?.morning || "";
   const night = gptResponse?.night || "";
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const showDrawer = () => {
+    setDrawerVisible(true);
+  };
+
+  const onCloseDrawer = () => {
+    setDrawerVisible(false);
+  };
 
   useEffect(() => {
+<<<<<<< HEAD
     const smoothScroll = (target, duration) => {
       let start = window.pageXOffset;
+=======
+    // Smooth scrolling function
+
+    function smoothScroll(target, duration) {
+      let start = window.pageXOffset; // Start position is the current horizontal scroll
+>>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
       let distance = target - start;
       let startTime = null;
 
@@ -99,17 +120,33 @@ const Results = () => {
         ))}
       </div>
       <section className="section product-recommendations">
+        <button onClick={showDrawer} className="open-profile-button">
+          Open Profile
+        </button>
+
+        <Drawer
+          title="Profile"
+          placement="left"
+          closable={true}
+          onClose={onCloseDrawer}
+          open={drawerVisible}
+          width={400}
+        >
+          <Profile identifiedSkinCondition={prediction} />
+        </Drawer>
         <h2>Product Recommendations</h2>
         {Object.keys(ingredients).length > 0 ? (
           <ol>
-            {Object.entries(ingredients).map(([ingredient, description], index) => (
-              <li key={index}>
-                <strong>{ingredient}</strong>
-                <ul style={{ marginLeft: "20px" }}>
-                  <li>{description}</li>
-                </ul>
-              </li>
-            ))}
+            {Object.entries(ingredients).map(
+              ([ingredient, description], index) => (
+                <li key={index}>
+                  <strong>{ingredient}</strong>
+                  <ul style={{ marginLeft: "20px" }}>
+                    <li>{description}</li>
+                  </ul>
+                </li>
+              )
+            )}
           </ol>
         ) : (
           <p>No product recommendations available.</p>
@@ -117,12 +154,17 @@ const Results = () => {
       </section>
 
       <section className="section routines">
+<<<<<<< HEAD
         <div className="daytime-container">
           <Daytime products={morning.split('.')} />
         </div>
         <div className="nighttime-container">
           <Nighttime products={night.split('.')} />
         </div>
+=======
+        <Daytime products={morning.split(".")} />
+        <Nighttime products={night.split(".")} />
+>>>>>>> bb032034a198b2c0d7e753e42eda08ee1ba3360e
       </section>
     </div>
   );
